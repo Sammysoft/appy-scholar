@@ -44,7 +44,7 @@ const ClassMasterDashboard = () => {
         <>
           <ScreenWrapper>
             <div
-               style={currentHour <= 12 ?  {
+               style={currentHour < 12 ?  {
                 width: "100%",
                 height: "20vh",
                 textAlign: "left",
@@ -55,7 +55,7 @@ const ClassMasterDashboard = () => {
                 borderBottom: "2px solid black",
                 position: "relative",
                 marginTop: "0px",
-              } : currentHour <= 16 ? {
+              } : currentHour < 16 ? {
                 width: "100%",
                 height: "20vh",
                 textAlign: "left",
@@ -66,7 +66,7 @@ const ClassMasterDashboard = () => {
                 borderBottom: "2px solid black",
                 position: "relative",
                 marginTop: "0px",
-              } : currentHour <=20 ? {
+              } : currentHour < 20 ? {
                 width: "100%",
                 height: "20vh",
                 textAlign: "left",
@@ -102,7 +102,7 @@ const ClassMasterDashboard = () => {
                   color: "white",
                 }}
               >
-                 {currentHour <= 12 ? <>Good Morning</>: currentHour <= 16 ? <>Good Afternoon</>: currentHour <= 20 ? <>Good Evening</>: <>Good Night</> }
+                 {currentHour < 12 ? <>Good Morning</>: currentHour < 16 ? <>Good Afternoon</>: currentHour < 20 ? <>Good Evening</>: <>Good Night</> }
               </div>
               <div
                 style={{
