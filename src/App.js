@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import AuthScreen from "./screens/authscreen";
 import ErrorScreen from "./screens/ErrorScreen";
@@ -10,16 +10,17 @@ import DashboardPage from "./screens/DashboardPage";
 import OfflineScreen from "./screens/OfflineScreen";
 
 function App() {
-  const [status, setStatus] = useState(Boolean)
+  const [status, setStatus] = useState(Boolean);
 
-  useEffect(()=>{
-    if(navigator.onLine){
-      setStatus(true)
+  useEffect(() => {
+    if (navigator.onLine) {
+      setStatus(true);
     }
-  },[status])
+  }, [status]);
+  
 
   switch (status) {
-    case (true):
+    case true:
       return (
         <Routes>
           <Route path="/" exact element={<FlashScreen />} />
@@ -32,16 +33,35 @@ function App() {
           <Route path="/staff/*" exact element={<DashboardPage />} />
           <Route path="*" exact element={<ErrorScreen />} />
         </Routes>
-        );
+      );
+      break;
+    case false:
+      return <OfflineScreen />;
       break;
 
     default:
-      return(
-        <OfflineScreen />
-      )
+      return (
+        <>
+          <div
+            style={{
+              width: "100vw",
+              height: "100vh",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Loader active inline="centered" />
+            <br />
+            <span style={{ fontWeight: "50", opacity: "0.4" }}>
+              Fetching Resource...
+            </span>
+          </div>
+        </>
+      );
       break;
   }
-
 }
 
 export default App;
