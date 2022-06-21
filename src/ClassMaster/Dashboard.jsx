@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import AdminBottomNav from "../Admin/bottomnav";
+import Swal from "sweetalert2";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
 import student from "../svg/student.svg";
@@ -36,6 +37,13 @@ const ClassMasterDashboard = () => {
 
   useEffect(() => {
     setScreen(thisRoute);
+    if(thisRoute === "/dashboard"){
+      Swal.fire({
+        icon: "",
+        text:"Have a happy Appy scholarly day, mate! 🤣🤣",
+        title: "Howdy 🤓"
+      })
+    }
   }, [thisRoute]);
 
   switch (screen) {

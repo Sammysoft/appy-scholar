@@ -21,7 +21,7 @@ const Uploads = () => {
     } else {
       Swal.fire({
         icon: "warning",
-        title: "Oops!",
+        title: "Oops! 😡",
         text: "Please, fill all Scores",
       });
     }
