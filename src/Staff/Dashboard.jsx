@@ -9,6 +9,7 @@ import dossier from "../svg/dossier.svg";
 import list from "../svg/list.svg";
 import Upload from "../components/uploads";
 import Subjects from "../components/subjects";
+import NavigatorRouter from "../screens/Navigator";
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -32,6 +33,13 @@ const StaffDashboard = () => {
 
   useEffect(() => {
     setScreen(thisRoute);
+    if(thisRoute === "/dashboard"){
+      Swal.fire({
+        icon: "",
+        text:"Nice to have you here 🤣🤣",
+        title: "Howdy 🤓"
+      })
+    }
   }, [thisRoute]);
 
   switch (screen) {
@@ -98,7 +106,7 @@ const StaffDashboard = () => {
                   color: "white",
                 }}
               >
-                {currentHour < 12 ? <>Good Morning</>: currentHour < 16 ? <>Good Afternoon</>: currentHour < 20 ? <>Good Evening</>: <>Good Night</> }
+                 {currentHour < 12 ? <>Good Morning ⛅</>: currentHour < 16 ? <>Good Afternoon 🌞</>: currentHour < 20 ? <> Good Evening 🌖</>: currentHour < 22 ? <>Almost Bedtime 🌖  </>: <>It's Bedtime 🌛</>}
               </div>
               <div
                 style={{
@@ -211,7 +219,7 @@ const StaffDashboard = () => {
                   </Link>
                 </div>
               </div>
-              <AdminBottomNav />
+           <NavigatorRouter />
             </div>
           </ScreenWrapper>
         </>

@@ -8,6 +8,9 @@ import OnboardScreen from "./screens/onboardscreen";
 import SignupScreen from "./screens/SignupScreen";
 import DashboardPage from "./screens/DashboardPage";
 import OfflineScreen from "./screens/OfflineScreen";
+import NavigatorRouter from "./screens/Navigator";
+import NotificationScreen from "./screens/NotificationScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
 function App() {
   const [status, setStatus] = useState(Boolean);
@@ -17,7 +20,7 @@ function App() {
       setStatus(true);
     }
   }, [status]);
-  
+
 
   switch (status) {
     case true:
@@ -31,6 +34,8 @@ function App() {
           <Route path="/admin/*" exact element={<DashboardPage />} />
           <Route path="/master/*" exact element={<DashboardPage />} />
           <Route path="/staff/*" exact element={<DashboardPage />} />
+          <Route path="/account/settings" exact element={<SettingsScreen />} />
+          <Route path="/account/notification" exact element={<NotificationScreen />} />
           <Route path="*" exact element={<ErrorScreen />} />
         </Routes>
       );

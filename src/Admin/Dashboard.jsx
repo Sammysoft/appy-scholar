@@ -40,6 +40,13 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     setScreen(thisRoute);
+    if(thisRoute === "/dashboard"){
+      Swal.fire({
+        icon: "",
+        text:"Nice to have you here 🤣🤣",
+        title: "Howdy 🤓"
+      })
+    }
   }, [thisRoute]);
 
   switch (screen) {
@@ -63,7 +70,7 @@ const AdminDashboard = () => {
             width: "100%",
             height: "20vh",
             textAlign: "left",
-            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background2.jpg)`,
+            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background5.jpg)`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "contain",
             backgroundSize: "cover",
@@ -74,7 +81,7 @@ const AdminDashboard = () => {
             width: "100%",
             height: "20vh",
             textAlign: "left",
-            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background.jpg)`,
+            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background4.jpg)`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "contain",
             backgroundSize: "cover",
@@ -85,7 +92,7 @@ const AdminDashboard = () => {
             width: "100%",
             height: "20vh",
             textAlign: "left",
-            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background.jpg)`,
+            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background3.jpg)`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "contain",
             backgroundSize: "cover",
@@ -106,7 +113,7 @@ const AdminDashboard = () => {
                   color: "white",
                 }}
               >
-                 {currentHour < 12 ? <>Good Morning</>: currentHour < 16 ? <>Good Afternoon</>: currentHour < 20 ? <>Good Evening</>: <>Good Night</> }
+                  {currentHour < 12 ? <>Good Morning ⛅</>: currentHour < 16 ? <>Good Afternoon 🌞</>: currentHour < 20 ? <> Good Evening 🌖</>: currentHour < 22 ? <>Almost Bedtime 🌖  </>: <>It's Bedtime 🌛</>}
               </div>
               <div
                 style={{

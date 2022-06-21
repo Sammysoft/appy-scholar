@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
-import AdminBottomNav from "../Admin/bottomnav";
 import Swal from "sweetalert2";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
@@ -14,6 +13,7 @@ import Student from "./students";
 import AddStudent from "./addstudent";
 import Comments from "./comments";
 import Upload from "../components/uploads";
+import NavigatorRouter from "../screens/Navigator";
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -40,7 +40,7 @@ const ClassMasterDashboard = () => {
     if(thisRoute === "/dashboard"){
       Swal.fire({
         icon: "",
-        text:"Have a happy Appy scholarly day, mate! 🤣🤣",
+        text:"Nice to have you here 🤣🤣",
         title: "Howdy 🤓"
       })
     }
@@ -67,7 +67,7 @@ const ClassMasterDashboard = () => {
                 width: "100%",
                 height: "20vh",
                 textAlign: "left",
-                backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background2.jpg)`,
+                backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background5.jpg)`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "contain",
                 backgroundSize: "cover",
@@ -78,7 +78,7 @@ const ClassMasterDashboard = () => {
                 width: "100%",
                 height: "20vh",
                 textAlign: "left",
-                backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background.jpg)`,
+                backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background4.jpg)`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "contain",
                 backgroundSize: "cover",
@@ -89,7 +89,7 @@ const ClassMasterDashboard = () => {
                 width: "100%",
                 height: "20vh",
                 textAlign: "left",
-                backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background.jpg)`,
+                backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background3.jpg)`,
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "contain",
                 backgroundSize: "cover",
@@ -110,7 +110,7 @@ const ClassMasterDashboard = () => {
                   color: "white",
                 }}
               >
-                 {currentHour < 12 ? <>Good Morning</>: currentHour < 16 ? <>Good Afternoon</>: currentHour < 20 ? <>Good Evening</>: <>Good Night</> }
+                 {currentHour < 12 ? <>Good Morning ⛅</>: currentHour < 16 ? <>Good Afternoon 🌞</>: currentHour < 20 ? <> Good Evening 🌖</>: currentHour < 22 ? <>Almost Bedtime 🌖  </>: <>It's Bedtime 🌛</>}
               </div>
               <div
                 style={{
@@ -281,7 +281,7 @@ const ClassMasterDashboard = () => {
                   </Link>
                 </div>
               </div>
-              <AdminBottomNav />
+              <NavigatorRouter />
             </div>
           </ScreenWrapper>
         </>
