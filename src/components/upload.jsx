@@ -21,8 +21,8 @@ const Uploads = () => {
     } else {
       Swal.fire({
         icon: "warning",
-        title: "Oops! 😡",
-        text: "Please, fill all Scores",
+        title: "Hey! 😡",
+        text: "Ensure you enter 1st CA, 2nd CA, & Exams scores for a student before attempting to upload (PS: I'll help you compute the total). Okay?",
       });
     }
   };
