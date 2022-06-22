@@ -113,7 +113,7 @@ const AdminDashboard = () => {
                   color: "white",
                 }}
               >
-                  {currentHour < 12 ? <>Good Morning ⛅</>: currentHour < 16 ? <>Good Afternoon 🌞</>: currentHour < 20 ? <> Good Evening 🌖</>: currentHour < 22 ? <>Almost Bedtime 🌖  </>: <>It's Bedtime 🌛</>}
+                  {currentHour < 12 ? <>Good Morning ⛅</>: currentHour < 16 ? <>Good Afternoon 🌞</>: currentHour < 20 ? <> Good Evening 🌖</>: currentHour < 22 ? <>Almost Bedtime 🥱  </>: <>It's Bedtime 🌛</>}
               </div>
               <div
                 style={{
