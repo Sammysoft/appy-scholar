@@ -33,7 +33,7 @@ const NavigatorRouter = () => {
         }}
       >
         <Link
-          to="/"
+          to="/dashboard"
           style={{
             textDecoration: "none",
             textDecorationLine: "none",

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import AdminBottomNav from "./bottomnav";
+import Swal from "sweetalert2"
 import Student from "./student";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
@@ -17,6 +17,7 @@ import TermConfig from "./terminal-config";
 import Staff from "./staff";
 import StaffList from "../components/stafflist";
 import Subjects from "./subjects";
+import NavigatorRouter from "../screens/Navigator";
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -316,7 +317,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-              <AdminBottomNav />
+              <NavigatorRouter />
             </div>
           </ScreenWrapper>
         </>

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Select } from "semantic-ui-react";
-import AdminBottomNav from "./bottomnav";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import NavigatorRouter from "../screens/Navigator";
 
 
 const ScreenWrapper = styled.div`
@@ -161,7 +161,7 @@ const TermConfig = () => {
               </Form>
             </div>
           </div>
-          <AdminBottomNav />
+          <NavigatorRouter />
         </div>
       </ScreenWrapper>
     </>

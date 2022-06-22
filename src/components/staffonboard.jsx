@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Select, Dropdown } from "semantic-ui-react";
-import DatePicker from "react-datepicker";
 import styled from "styled-components";
-import "react-datepicker/dist/react-datepicker.css";
 import { subjects } from "../data";
-import plus from "../svg/plus.svg";
-
 
 const genderOptions = [
   { key: "m", text: "Male", value: "male" },
@@ -15,12 +11,22 @@ const genderOptions = [
 ];
 
 const marriageOptions = [
-    { key: "m", text: "Married", value: "Married" },
-    { key: "f", text: "Single", value: "Single" },
-    { key: "o", text: "Divorced", value: "Divorced" },
-  ];
-
-
+  { key: "m", text: "Married", value: "Married" },
+  { key: "f", text: "Single", value: "Single" },
+  { key: "o", text: "Divorced", value: "Divorced" },
+];
+const roleOptions = [
+  { key: "m", text: "Staff", value: "Staff" },
+  { key: "f", text: "Class Master", value: "Class Master" },
+];
+const classOptions = [
+  { key: "m", text: "Jss One", value: "Jss One" },
+  { key: "f", text: "Jss Two", value: "Jss Two" },
+  { key: "jj", text: "Jss Three", value: "Jss Three" },
+  { key: "k", text: "Sss One", value: "Sss One" },
+  { key: "l", text: "Sss Two", value: "Sss Two" },
+  { key: "g", text: "Sss Three", value: "Sss Three" },
+];
 
 const Button = styled.span`
   border-radius: 7px;
@@ -35,14 +41,15 @@ const Button = styled.span`
 `;
 
 const StaffOnboardForm = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phonenumber, setPhoneNumber] = useState("");
   const [gender, setGender] = useState("");
+  const [showClass, setShowClass] = useState(false);
+  const [classRole, setClassRole] = useState("")
   const [maritalStatus, setMaritalStatus] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
+  const [role, setRole] = useState("");
   const [subject, setSubjects] = useState({ selectedSubjects: [] });
 
   const { selectedSubjects } = subject;
@@ -54,12 +61,13 @@ const StaffOnboardForm = () => {
       firstname,
       lastname,
       gender,
-      startDate,
-      maritalStatus
+      role,
+      maritalStatus,
+      classRole
     };
 
     console.log(payload);
-    navigate("/admin/staff/list")
+    navigate("/admin/staff/list");
   };
 
   return (
@@ -72,36 +80,6 @@ const StaffOnboardForm = () => {
             fontFamily: "Irish Grover",
           }}
         >
-          <div
-            style={{
-              backgroundImage: `url(/images/user.jpg)`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              width: "100%",
-              height: "40vh",
-              border: "2px solid black",
-              margin: "auto",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div
-              style={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                alignItems: "center",
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <img src={plus} alt="plus" />
-            </div>
-          </div>
           <Form.Group widths="equal">
             <Form.Field
               style={{ fontFamily: "Irish Grover" }}
@@ -144,16 +122,7 @@ const StaffOnboardForm = () => {
               placeholder="Gender"
               onChange={(e) => setGender(e.target.textContent)}
             />
-            <Form.Field
-              style={{ fontFamily: "Irish Grover" }}
-              label="D.O.B"
-              placeholder="Date Of Birth"
-            />
-            <DatePicker
-              label="Date Of Birth"
-              selected={startDate}
-              onChange={(Date) => setStartDate(Date)}
-            />
+
             <Form.Field
               style={{ fontFamily: "Irish Grover" }}
               control={Select}
@@ -163,18 +132,6 @@ const StaffOnboardForm = () => {
               onChange={(e) => setMaritalStatus(e.target.textContent)}
             />
           </Form.Group>
-          <Form.Field
-              style={{ fontFamily: "Irish Grover" }}
-              type="number"
-              control={Input}
-              label="Phone Number"
-              placeholder="+234 90 123 456 78"
-              value={phonenumber}
-              onChange={(e) => {
-                setPhoneNumber(e.target.value);
-              }}
-            />
-
           <Form.Field
             label="Subjects"
             style={{ fontFamily: "Irish Grover" }}
@@ -194,23 +151,53 @@ const StaffOnboardForm = () => {
               });
             }}
           />
-
+          <Form.Field
+            style={{ fontFamily: "Irish Grover" }}
+            control={Select}
+            label="Role"
+            options={roleOptions}
+            placeholder="Staff"
+            onChange={(e) => {
+              setRole(e.target.textContent);
+              if (e.target.textContent === "Class Master") {
+                setShowClass(true);
+              }
+            }}
+          />
+          {showClass === true ? (
+            <>
+              <Form.Field
+                style={{ fontFamily: "Irish Grover" }}
+                control={Select}
+                label="Class"
+                options={classOptions}
+                placeholder="Class"
+                onChange={(e) => {
+                  setClassRole(e.target.textContent);
+                    // setRole(`Class Master [${e.target.textContent}]`)
+                    setShowClass(false)
+                }}
+              />
+            </>
+          ) : (
+            <></>
+          )}
         </Form>
         <br />
-          <br />
-          <Button
-            onClick={(e) => {
-              _signUp(e);
-            }}
-          >
-            Done
-          </Button>
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
+        <br />
+        <Button
+          onClick={(e) => {
+            _signUp(e);
+          }}
+        >
+          Done
+        </Button>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     </>
   );
