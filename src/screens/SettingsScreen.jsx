@@ -19,8 +19,8 @@ const SettingsScreen = () => {
   const [toggle, setToggle] = useState("");
 
   useEffect(() => {
-    setToggle(toggle);
-  }, [toggle]);
+    setToggle("");
+  }, []);
 
   return (
     <>

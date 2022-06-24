@@ -8,9 +8,9 @@ import OnboardScreen from "./screens/onboardscreen";
 import SignupScreen from "./screens/SignupScreen";
 import DashboardPage from "./screens/DashboardPage";
 import OfflineScreen from "./screens/OfflineScreen";
-import NavigatorRouter from "./screens/Navigator";
 import NotificationScreen from "./screens/NotificationScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import QuestionUpload from "./screens/QuestionUploadPage";
 
 function App() {
   const [status, setStatus] = useState(Boolean);
@@ -36,6 +36,7 @@ function App() {
           <Route path="/staff/*" exact element={<DashboardPage />} />
           <Route path="/account/settings" exact element={<SettingsScreen />} />
           <Route path="/account/notification" exact element={<NotificationScreen />} />
+          <Route path="/upload/questions" exact element={<QuestionUpload />} />
           <Route path="*" exact element={<ErrorScreen />} />
         </Routes>
       );

@@ -247,7 +247,7 @@ const AdminDashboard = () => {
                       }}
                     >
                       <img src={pdf} alt="cap" height="100px" width="100%" />
-                      <span>Results Config</span>
+                      <span>Results</span>
                     </div>
                   </Link>
                   <Link

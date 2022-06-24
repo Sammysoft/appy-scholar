@@ -7,6 +7,7 @@ import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
 import student from "../svg/student.svg";
 import comment from "../svg/comment.svg";
+import question from "../svg/question.svg";
 import dossier from "../svg/dossier.svg";
 import list from "../svg/list.svg";
 import Student from "./students";
@@ -277,6 +278,35 @@ const ClassMasterDashboard = () => {
                         width="100%"
                       />
                       <span>Dossier</span>
+                    </div>
+                  </Link>
+                  <Link
+                    onClick={() => {
+                      setScreen("/upload/questions");
+                    }}
+                    to="/upload/questions"
+                    style={{
+                      textDecoration: "none",
+                      textDecorationLine: "none",
+                      color: "black",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        borderRadius: "5px",
+                        boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
+                      }}
+                    >
+                      <img
+                        src={question}
+                        alt="question"
+                        height="100px"
+                        width="100%"
+                      />
+                      <span>Upload Questions</span>
                     </div>
                   </Link>
                 </div>
