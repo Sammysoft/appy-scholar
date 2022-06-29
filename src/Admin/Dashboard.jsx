@@ -1,12 +1,13 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
 import Student from "./student";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
 import pdf from "../svg/pdf.svg";
 import list from "../svg/list.svg";
+import download from "../svg/download.svg";
 import staff from "../svg/staff.svg";
 import student from "../svg/student.svg";
 import stats from "../svg/stats.svg";
@@ -18,15 +19,16 @@ import Staff from "./staff";
 import StaffList from "../components/stafflist";
 import Subjects from "./subjects";
 import NavigatorRouter from "../screens/Navigator";
+import UploadedQuestions from "./questions";
 
 const ScreenWrapper = styled.div`
-  height: 100vh;
+  min-height: 110vh;
+  height: fit-content;
   width: 100vw;
   display: flex;
   align-items: center;
   flex-direction: column;
   background-color: white;
-  padding: 0px;
   margin: 0px;
   box-sizing: border-box;
 `;
@@ -36,17 +38,17 @@ const AdminDashboard = () => {
   const thisRoute = location.pathname;
   const [screen, setScreen] = useState(`${thisRoute}`);
   const navigate = useNavigate();
-  const time  = new Date();
+  const time = new Date();
   let currentHour = time.getHours();
 
   useEffect(() => {
     setScreen(thisRoute);
-    if(thisRoute === "/dashboard"){
+    if (thisRoute === "/dashboard") {
       Swal.fire({
         icon: "",
-        text:"Nice to have you here 🤣🤣",
-        title: "Howdy 🤓"
-      })
+        text: "Nice to have you here 🤣🤣",
+        title: "Howdy 🤓",
+      });
     }
   }, [thisRoute]);
 
@@ -56,51 +58,59 @@ const AdminDashboard = () => {
         <>
           <ScreenWrapper>
             <div
-           style={currentHour < 12 ?  {
-            width: "100%",
-            height: "20vh",
-            textAlign: "left",
-            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background.jpg)`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "contain",
-            backgroundSize: "cover",
-            borderBottom: "2px solid black",
-            position: "relative",
-            marginTop: "0px",
-          } : currentHour < 16 ? {
-            width: "100%",
-            height: "20vh",
-            textAlign: "left",
-            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background5.jpg)`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "contain",
-            backgroundSize: "cover",
-            borderBottom: "2px solid black",
-            position: "relative",
-            marginTop: "0px",
-          } : currentHour < 20 ? {
-            width: "100%",
-            height: "20vh",
-            textAlign: "left",
-            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background4.jpg)`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "contain",
-            backgroundSize: "cover",
-            borderBottom: "2px solid black",
-            position: "relative",
-            marginTop: "0px",
-          } : {
-            width: "100%",
-            height: "20vh",
-            textAlign: "left",
-            backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background3.jpg)`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "contain",
-            backgroundSize: "cover",
-            borderBottom: "2px solid black",
-            position: "relative",
-            marginTop: "0px",
-          }}
+              style={
+                currentHour < 12
+                  ? {
+                      width: "100%",
+                      height: "20vh",
+                      textAlign: "left",
+                      backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background.jpg)`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "contain",
+                      backgroundSize: "cover",
+                      borderBottom: "2px solid black",
+                      position: "relative",
+                      marginTop: "0px",
+                    }
+                  : currentHour < 16
+                  ? {
+                      width: "100%",
+                      height: "20vh",
+                      textAlign: "left",
+                      backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background5.jpg)`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "contain",
+                      backgroundSize: "cover",
+                      borderBottom: "2px solid black",
+                      position: "relative",
+                      marginTop: "0px",
+                    }
+                  : currentHour < 20
+                  ? {
+                      width: "100%",
+                      height: "20vh",
+                      textAlign: "left",
+                      backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background4.jpg)`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "contain",
+                      backgroundSize: "cover",
+                      borderBottom: "2px solid black",
+                      position: "relative",
+                      marginTop: "0px",
+                    }
+                  : {
+                      width: "100%",
+                      height: "20vh",
+                      textAlign: "left",
+                      backgroundImage: `linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url(/images/background3.jpg)`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "contain",
+                      backgroundSize: "cover",
+                      borderBottom: "2px solid black",
+                      position: "relative",
+                      marginTop: "0px",
+                    }
+              }
             >
               <span onClick={() => navigate(-1)}>
                 <img src={leftarrow} alt="pointer" />
@@ -114,7 +124,17 @@ const AdminDashboard = () => {
                   color: "white",
                 }}
               >
-                  {currentHour < 12 ? <>Good Morning ⛅</>: currentHour < 16 ? <>Good Afternoon 🌞</>: currentHour < 20 ? <> Good Evening 🌖</>: currentHour < 22 ? <>Almost Bedtime 🥱  </>: <>It's Bedtime 🌛</>}
+                {currentHour < 12 ? (
+                  <>Good Morning ⛅</>
+                ) : currentHour < 16 ? (
+                  <>Good Afternoon 🌞</>
+                ) : currentHour < 20 ? (
+                  <> Good Evening 🌖</>
+                ) : currentHour < 22 ? (
+                  <>Almost Bedtime 🥱 </>
+                ) : (
+                  <>It's Bedtime 🌛</>
+                )}
               </div>
               <div
                 style={{
@@ -180,7 +200,6 @@ const AdminDashboard = () => {
                     style={{
                       textDecoration: "none",
 
-
                       textDecorationLine: "none",
                       color: "black",
                     }}
@@ -214,17 +233,22 @@ const AdminDashboard = () => {
                       color: "black",
                     }}
                   >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-                    }}
-                  >
-                    <img src={staff} alt="staff" height="100px" width="100%" />
-                    <span>Staff</span>
-                  </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
+                      }}
+                    >
+                      <img
+                        src={staff}
+                        alt="staff"
+                        height="100px"
+                        width="100%"
+                      />
+                      <span>Staff</span>
+                    </div>
                   </Link>
                   <Link
                     onClick={() => {
@@ -261,18 +285,18 @@ const AdminDashboard = () => {
                       color: "black",
                     }}
                   >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      borderRadius: "5px",
-                      boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-                    }}
-                  >
-                    <img src={list} alt="list" height="100px" width="100%" />
-                    <span>Available Subjects</span>
-                  </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        borderRadius: "5px",
+                        boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
+                      }}
+                    >
+                      <img src={list} alt="list" height="100px" width="100%" />
+                      <span>Available Subjects</span>
+                    </div>
                   </Link>
                   <Link
                     onClick={() => {
@@ -285,23 +309,23 @@ const AdminDashboard = () => {
                       color: "black",
                     }}
                   >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      borderRadius: "5px",
-                      boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-                    }}
-                  >
-                    <img
-                      src={sliders}
-                      alt="sliders"
-                      height="100px"
-                      width="100%"
-                    />
-                    <span>Term Config</span>
-                  </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        borderRadius: "5px",
+                        boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
+                      }}
+                    >
+                      <img
+                        src={sliders}
+                        alt="sliders"
+                        height="100px"
+                        width="100%"
+                      />
+                      <span>Term Config</span>
+                    </div>
                   </Link>
                   <div
                     style={{
@@ -315,6 +339,35 @@ const AdminDashboard = () => {
                     <img src={stats} alt="stats" height="100px" width="100%" />
                     <span>Overall Statistics</span>
                   </div>
+                  <Link
+                    onClick={() => {
+                      setScreen("/admin/download/questions");
+                    }}
+                    to="/admin/download/questions"
+                    style={{
+                      textDecoration: "none",
+                      textDecorationLine: "none",
+                      color: "black",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        borderRadius: "5px",
+                        boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
+                      }}
+                    >
+                      <img
+                        src={download}
+                        alt="download"
+                        height="100px"
+                        width="100%"
+                      />
+                      <span>Download Questions</span>
+                    </div>
+                  </Link>
                 </div>
               </div>
               <NavigatorRouter />
@@ -344,34 +397,41 @@ const AdminDashboard = () => {
         </>
       );
       break;
-      case "/admin/term-config":
-        return (
-          <>
-           <TermConfig />
-          </>
-        );
-        break;
-        case "/admin/staff":
-          return (
-            <>
-             <Staff />
-            </>
-          );
-          break;
-          case "/admin/staff/list":
-            return (
-              <>
-                <StaffList />
-              </>
-            );
-            break;
-            case "/admin/subjects":
-              return (
-                <>
-                 <Subjects />
-                </>
-              );
-              break;
+    case "/admin/term-config":
+      return (
+        <>
+          <TermConfig />
+        </>
+      );
+      break;
+    case "/admin/staff":
+      return (
+        <>
+          <Staff />
+        </>
+      );
+      break;
+    case "/admin/staff/list":
+      return (
+        <>
+          <StaffList />
+        </>
+      );
+      break;
+    case "/admin/subjects":
+      return (
+        <>
+          <Subjects />
+        </>
+      );
+      break;
+    case "/admin/download/questions":
+      return (
+        <>
+          <UploadedQuestions />
+        </>
+      );
+      break;
     default:
       break;
   }
