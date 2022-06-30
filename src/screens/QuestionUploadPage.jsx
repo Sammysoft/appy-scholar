@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
-import plus from "../svg/plus.svg";
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -16,10 +15,24 @@ const ScreenWrapper = styled.div`
   box-sizing: border-box;
 `;
 
+const Button = styled.span`
+  border-radius: 7px;
+  padding: 10px 15px;
+  color: #150845;
+  background-color: #dbb921;
+  font-size: 1.5rem;
+  font-weight: 500;
+  width: 100%;
+  text-align: center;
+`;
+
 const QuestionUpload = () => {
   const navigate = useNavigate();
   const [classData, setClassData] = useState(null);
   const [toggleSelect, setToggleSelect] = useState(false);
+  const [instruction, setInstruction] = useState("");
+  const [duration, setDuration] = useState("");
+  const [marks, setMarks] = useState("");
 
   useEffect(() => {
     setClassData(classData);
@@ -59,16 +72,16 @@ const QuestionUpload = () => {
               style={{
                 display: "flex",
                 flexDirection: "row",
-                width:"100vw",
+                width: "100vw",
                 overflowX: "scroll",
                 height: "fit-content",
-                scrollbarWidth:"none"
+                scrollbarWidth: "none",
               }}
             >
-            <div
+              <div
                 style={{
                   height: "30vh",
-                  width:"30vw",
+                  width: "30vw",
                   borderRadius: "8px",
                   backgroundColor: "whitesmoke",
                   display: "flex",
@@ -76,7 +89,7 @@ const QuestionUpload = () => {
                   justifyContent: "center",
                   color: "#150845",
                   margin: "10px",
-                padding:"30px"
+                  padding: "30px",
                 }}
               >
                 Mathematics <br />
@@ -93,7 +106,7 @@ const QuestionUpload = () => {
                   justifyContent: "center",
                   color: "#150845",
                   margin: "10px",
-                  padding:"30px"
+                  padding: "30px",
                 }}
               >
                 Mathematics <br />
@@ -110,7 +123,7 @@ const QuestionUpload = () => {
                   justifyContent: "center",
                   color: "#150845",
                   margin: "10px",
-                  padding:"30px"
+                  padding: "30px",
                 }}
               >
                 Mathematics <br />
@@ -127,7 +140,7 @@ const QuestionUpload = () => {
                   justifyContent: "center",
                   color: "#150845",
                   margin: "10px",
-                  padding:"30px"
+                  padding: "30px",
                 }}
               >
                 Economics <br />
@@ -144,27 +157,11 @@ const QuestionUpload = () => {
                   justifyContent: "center",
                   color: "#150845",
                   margin: "10px",
-                  padding:"30px"
+                  padding: "30px",
                 }}
               >
                 Economics <br />
                 [Sss One]
-              </div>
-              <div
-                style={{
-                  height: "30vh",
-                  width: "30vw",
-                  borderRadius: "8px",
-                  backgroundColor: "whitesmoke",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#150845",
-                  margin: "10px",
-                  padding:"30px"
-                }}
-              >
-                <img src={plus} alt="plus" />
               </div>
             </div>
             <div
@@ -189,22 +186,142 @@ const QuestionUpload = () => {
                   <div
                     style={{
                       width: "100vw",
-                      height: "70vh",
+                      height: "100vh",
                       position: "absolute",
+                      padding: "20px 10px",
                       zIndex: "1",
                       backgroundColor: "white",
                     }}
                   >
                     {classData}
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "40% 60%",
+                      }}
+                    >
+                      <div style={{ textAlign: "left" }}>
+                        <div>
+                          <span style={{ fontWeight: "800" }}>Duration: </span>
+                          <span style={{ fontSize: "0.7rem" }}>
+                            {" "}
+                            {duration}
+                          </span>
+                        </div>
+                      </div>
+                      <div style={{ textAlign: "left" }}>
+                        <span style={{ fontWeight: "800" }}>Marks: </span>
+                        <span style={{ fontSize: "0.7rem" }}> {marks}</span>
+                      </div>
+                    </div>
+                    <div style={{ textAlign: "left" }}>
+                      <span style={{ fontWeight: "800" }}>Instructions: </span>
+                      <span style={{ fontSize: "0.7rem" }}>{instruction}</span>
+                    </div>
                     <textarea
                       style={{
                         width: "100%",
-                        height: "50%",
+                        height: "40%",
                         fontFamily: "Irish Grover",
                         border: "1px solid #150845",
                       }}
                       placeholder="Type Your Questions Here!"
                     ></textarea>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "grid",
+                          gridTemplateColumns: "auto auto",
+                        }}
+                      >
+                        <div style={{ textAlign: "left" }}>
+                          <label>Exam Duration:</label>
+                          <select
+                            onChange={(e) => {
+                              setDuration(e.target.value);
+                            }}
+                            style={{
+                              width: "90%",
+                              border: "1px solid #150845",
+                              backgroundColor: "white",
+                              color: "#150845",
+                              fontFamily: "Irish Grover",
+                              padding: "10px 5px",
+                              borderRadius: "5px",
+                            }}
+                          >
+                            <option value="30 Min">30minutes</option>
+                            <option value="45 Min">45minutes</option>
+                            <option value="1 hour">1 hour</option>
+                            <option value="1 hour 30min">
+                              1 hour 30minutes
+                            </option>
+                            <option value="1 hour 45min">
+                              1 hour 45minutes
+                            </option>
+                            <option value="2 hours">2 hours</option>
+                          </select>
+                        </div>
+                        <div style={{ textAlign: "left" }}>
+                          <label>Question Marks:</label>
+                          <select
+                            onChange={(e) => {
+                              setMarks(e.target.value);
+                            }}
+                            style={{
+                              width: "90%",
+                              border: "1px solid #150845",
+                              backgroundColor: "white",
+                              color: "#150845",
+                              fontFamily: "Irish Grover",
+                              padding: "10px 5px",
+                              borderRadius: "5px",
+                            }}
+                          >
+                            <option value="5 Marks per question">
+                              5 marks per question
+                            </option>
+                            <option value="10 Marks per question">
+                              10 marks per question
+                            </option>
+                            <option value="15 Marks per question">
+                              15 marks per question
+                            </option>
+                            <option value="20 Marks per question">
+                              20 marks per question
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <label>Instructions:</label>
+                      <input
+                        type="text"
+                        value={instruction}
+                        onChange={(e) => {
+                          setInstruction(e.target.value);
+                        }}
+                        placeholder="Answer all questions. Each question carry equal marks"
+                        style={{
+                          width: "100%",
+                          border: "1px solid #150845",
+                          backgroundColor: "white",
+                          color: "#150845",
+                          fontFamily: "Irish Grover",
+                          padding: "10px 5px",
+                          borderRadius: "5px",
+                        }}
+                      />
+                      <br />
+                      <Button>Upload</Button>
+                    </div>
                   </div>
                 </>
               )}

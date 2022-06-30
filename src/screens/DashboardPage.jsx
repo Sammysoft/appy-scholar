@@ -9,7 +9,7 @@ const DashboardPage = () => {
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    setRole("Class Master");
+    setRole("Staff");
   }, []);
 
   switch (role) {
