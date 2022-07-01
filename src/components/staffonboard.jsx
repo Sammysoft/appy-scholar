@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Select, Dropdown } from "semantic-ui-react";
 import styled from "styled-components";
-import { subjects } from "../data";
+import axios from "axios";
+import { api } from "../strings";
+import Swal from "sweetalert2"
 
 const genderOptions = [
   { key: "m", text: "Male", value: "male" },
@@ -41,7 +43,7 @@ const Button = styled.span`
 `;
 
 const StaffOnboardForm = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -51,6 +53,7 @@ const StaffOnboardForm = () => {
   const [maritalStatus, setMaritalStatus] = useState("");
   const [role, setRole] = useState("");
   const [subject, setSubjects] = useState({ selectedSubjects: [] });
+  const [subjects, setSubject] = useState([])
 
   const { selectedSubjects } = subject;
 
@@ -61,14 +64,36 @@ const StaffOnboardForm = () => {
       firstname,
       lastname,
       gender,
+      subject,
       role,
+      email,
       maritalStatus,
       classRole
     };
-
-    console.log(payload);
-    navigate("/admin/staff/list");
+    axios.post(`${api}/staffs/add`, payload).then(res=>{
+      navigate("/admin/staff/list")
+      console.log(res)
+    }).catch(error=>{
+      console.log(error)
+      Swal.fire({
+        title:"Oops",
+        text: error.response.data.msg
+      })
+    })
   };
+
+  useEffect(()=>{
+    axios.get(`${api}/subjects`).then((res)=>{
+      setSubject(res.data.data)
+      console.log(res.data.data)
+
+    }).catch(error=>{
+      Swal.fire({
+        title:"Oops",
+        text: error.response.data.msg
+      })
+    })
+  },[])
 
   return (
     <>

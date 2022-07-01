@@ -114,7 +114,7 @@ const SubjectList = () => {
                           borderRadius: "5px",
                         }}
                       >
-                        {el.subject}
+                        {el.text}
                       </div>
                     </>
                   );
