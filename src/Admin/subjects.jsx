@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
 import SubjectList from "../components/subjectlist";
-import NavigatorRouter from "../screens/Navigator";
 
 
 const ScreenWrapper = styled.div`
@@ -53,7 +52,6 @@ const Subjects = () => {
           <div style={{ width: "90%", margin:"auto" }}>
            <SubjectList />
           </div>
-          <NavigatorRouter />
         </div>
       </ScreenWrapper>
 
