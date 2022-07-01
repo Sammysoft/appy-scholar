@@ -52,7 +52,7 @@ const FlashScreen = () => {
         <TextWrapper>
           <p>Welcome</p>
           <p>To</p>
-          <p>Appy Scholar<img src={spark} alt="spark"/></p>
+          <p>Oladele Dossier<img src={spark} alt="spark"/></p>
           <br />
           <br />
           <Link
