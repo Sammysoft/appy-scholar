@@ -4,9 +4,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { api } from "../strings";
+import close from "../svg/close.svg";
 import Swal from "sweetalert2";
-
-
 
 const Button = styled.span`
   border-radius: 7px;
@@ -29,7 +28,6 @@ const StaffOnboardForm = () => {
   const [gender, setGender] = useState("");
   const [showClass, setShowClass] = useState(false);
   const [classRole, setClassRole] = useState("");
-  const [maritalStatus, setMaritalStatus] = useState("");
   let [counter, setCounter] = useState(0);
   const [role, setRole] = useState("");
   const [subject, setSubjects] = useState({ selectedSubjects: [] });
@@ -48,7 +46,6 @@ const StaffOnboardForm = () => {
       subject,
       role,
       email,
-      maritalStatus,
       classRole,
     };
     axios
@@ -253,6 +250,9 @@ const StaffOnboardForm = () => {
                 Gender
               </label>
               <select
+                onChange={(e) => {
+                  setGender(e.target.value);
+                }}
                 style={{
                   fontFamily: "Irish Grover",
                   border: "1px solid #150845",
@@ -422,11 +422,30 @@ const StaffOnboardForm = () => {
                             padding: "5px 10px",
                             textAlign: "center",
                             margin: "10px",
-                            color:"#150845",
+                            color: "#150845",
                             borderRadius: "5px",
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "flex-end",
                           }}
                         >
-                          {el}
+                          <span>{el}</span>
+                          <span>
+                            <img
+                              src={close}
+                              alt="close"
+                              height="16"
+                              width="16"
+                              onClick={() => {
+                                setSubjects({
+                                  selectedSubjects : selectedSubjects.filter(function (value) {
+                                    return (value !== el);
+                                  })
+                              });
+                              }}
+                            />
+                          </span>
                         </div>
                       </>
                     );
