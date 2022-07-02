@@ -55,9 +55,8 @@ const StaffOnboardForm = () => {
         console.log(res);
       })
       .catch((error) => {
-        console.log(error);
         Swal.fire({
-          title: "Oops",
+          title: "Oops 😞",
           text: error.response.data.msg,
         });
       });
@@ -72,7 +71,7 @@ const StaffOnboardForm = () => {
       })
       .catch((error) => {
         Swal.fire({
-          title: "Oops",
+          title: "Oops 😞",
           text: error.response.data.msg,
         });
       });

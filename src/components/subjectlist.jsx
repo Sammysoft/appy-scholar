@@ -32,7 +32,7 @@ const SubjectList = () => {
         setLoading(false)
         Swal.fire({
           timer:1000,
-          title:"Added",
+          title:"Added 👍",
           text:"You have added a new subject "
         })
       })
