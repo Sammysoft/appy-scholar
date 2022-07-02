@@ -18,7 +18,7 @@ const Button = styled.div`
 const SubjectList = () => {
   const [subject, setSubject] = useState("");
   const [subjects, setSubjects] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(Boolean);
 
   const _addSubject = (e) => {
     setLoading(true);
@@ -46,9 +46,11 @@ const SubjectList = () => {
   };
 
   useEffect(() => {
+    setLoading(true)
     axios.get(`${api}/subjects`).then((res) => {
       setSubjects(res.data.data);
     });
+    setLoading(false)
   }, [subjects]);
 
   return (

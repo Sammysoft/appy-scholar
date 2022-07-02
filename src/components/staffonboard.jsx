@@ -1,34 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Input, Select, Dropdown } from "semantic-ui-react";
 import styled from "styled-components";
 import axios from "axios";
 import { api } from "../strings";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
 
-const genderOptions = [
-  { key: "m", text: "Male", value: "male" },
-  { key: "f", text: "Female", value: "female" },
-  { key: "o", text: "Other", value: "other" },
-];
 
-const marriageOptions = [
-  { key: "m", text: "Married", value: "Married" },
-  { key: "f", text: "Single", value: "Single" },
-  { key: "o", text: "Divorced", value: "Divorced" },
-];
-const roleOptions = [
-  { key: "m", text: "Staff", value: "Staff" },
-  { key: "f", text: "Class Master", value: "Class Master" },
-];
-const classOptions = [
-  { key: "m", text: "Jss One", value: "Jss One" },
-  { key: "f", text: "Jss Two", value: "Jss Two" },
-  { key: "jj", text: "Jss Three", value: "Jss Three" },
-  { key: "k", text: "Sss One", value: "Sss One" },
-  { key: "l", text: "Sss Two", value: "Sss Two" },
-  { key: "g", text: "Sss Three", value: "Sss Three" },
-];
 
 const Button = styled.span`
   border-radius: 7px;
@@ -43,17 +20,20 @@ const Button = styled.span`
 `;
 
 const StaffOnboardForm = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [phonenumber, setPhoneNumber] = useState("");
   const [gender, setGender] = useState("");
   const [showClass, setShowClass] = useState(false);
-  const [classRole, setClassRole] = useState("")
+  const [classRole, setClassRole] = useState("");
   const [maritalStatus, setMaritalStatus] = useState("");
+  let [counter, setCounter] = useState(0);
   const [role, setRole] = useState("");
   const [subject, setSubjects] = useState({ selectedSubjects: [] });
-  const [subjects, setSubject] = useState([])
+  const [togglePage, setTogglePage] = useState(false);
+  const [subjects, setSubject] = useState([]);
 
   const { selectedSubjects } = subject;
 
@@ -68,161 +48,420 @@ const StaffOnboardForm = () => {
       role,
       email,
       maritalStatus,
-      classRole
+      classRole,
     };
-    axios.post(`${api}/staffs/add`, payload).then(res=>{
-      navigate("/admin/staff/list")
-      console.log(res)
-    }).catch(error=>{
-      console.log(error)
-      Swal.fire({
-        title:"Oops",
-        text: error.response.data.msg
+    axios
+      .post(`${api}/staffs/add`, payload)
+      .then((res) => {
+        navigate("/admin/staff/list");
+        console.log(res);
       })
-    })
+      .catch((error) => {
+        console.log(error);
+        Swal.fire({
+          title: "Oops",
+          text: error.response.data.msg,
+        });
+      });
   };
 
-  useEffect(()=>{
-    axios.get(`${api}/subjects`).then((res)=>{
-      setSubject(res.data.data)
-      console.log(res.data.data)
-
-    }).catch(error=>{
-      Swal.fire({
-        title:"Oops",
-        text: error.response.data.msg
+  useEffect(() => {
+    axios
+      .get(`${api}/subjects`)
+      .then((res) => {
+        setSubject(res.data.data);
+        console.log(res.data.data);
       })
-    })
-  },[])
+      .catch((error) => {
+        Swal.fire({
+          title: "Oops",
+          text: error.response.data.msg,
+        });
+      });
+  }, []);
+
+  const pickSubject = (el) => {};
+  const pickCount = (element) => {
+    setCounter((counter += 1));
+    console.log(element);
+    if (counter % 2 === 1) {
+      console.log("picked");
+      pickSubject();
+    } else {
+      console.log("unpicked");
+    }
+  };
 
   return (
     <>
       <div>
-        <Form
-          style={{
-            textAlign: "left",
-            fontSize: "1.5rem",
-            fontFamily: "Irish Grover",
-          }}
-        >
-          <Form.Group widths="equal">
-            <Form.Field
-              style={{ fontFamily: "Irish Grover" }}
-              control={Input}
-              label="First Name"
-              placeholder="Your name"
-              value={firstname}
-              onChange={(e) => {
-                setFirstName(e.target.value);
+        {togglePage === false ? (
+          <>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "left",
+                justifyContent: "space-around",
               }}
-            />
-            <Form.Field
-              style={{ fontFamily: "Irish Grover" }}
-              control={Input}
-              label="Last Name"
-              placeholder="Surname"
-              value={lastname}
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
-            />
-            <Form.Field
-              style={{ fontFamily: "Irish Grover" }}
-              type="email"
-              control={Input}
-              label="Email"
-              placeholder="example@gmail.com"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Field
-              style={{ fontFamily: "Irish Grover" }}
-              control={Select}
-              label="Gender"
-              options={genderOptions}
-              placeholder="Gender"
-              onChange={(e) => setGender(e.target.textContent)}
-            />
-
-            <Form.Field
-              style={{ fontFamily: "Irish Grover" }}
-              control={Select}
-              label="Marital Status"
-              options={marriageOptions}
-              placeholder="Married"
-              onChange={(e) => setMaritalStatus(e.target.textContent)}
-            />
-          </Form.Group>
-          <Form.Field
-            label="Subjects"
-            style={{ fontFamily: "Irish Grover" }}
-            placeholder="Date Of Birth"
-          />
-
-          <Dropdown
-            placeholder="Subjects"
-            fluid
-            multiple
-            search
-            selection
-            options={subjects}
-            onChange={(e) => {
-              setSubjects({
-                selectedSubjects: [...selectedSubjects, e.target.textContent],
-              });
-            }}
-          />
-          <Form.Field
-            style={{ fontFamily: "Irish Grover" }}
-            control={Select}
-            label="Role"
-            options={roleOptions}
-            placeholder="Staff"
-            onChange={(e) => {
-              setRole(e.target.textContent);
-              if (e.target.textContent === "Class Master") {
-                setShowClass(true);
-              }
-            }}
-          />
-          {showClass === true ? (
-            <>
-              <Form.Field
-                style={{ fontFamily: "Irish Grover" }}
-                control={Select}
-                label="Class"
-                options={classOptions}
-                placeholder="Class"
+            >
+              <span
+                style={{
+                  fontWeight: "800",
+                  fontSize: "1.5rem",
+                  color: "#150845",
+                }}
+              >
+                Bio Data Form
+              </span>
+              <label
+                style={{
+                  fontFamily: "Irish Grover",
+                  textAlign: "left",
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  color: "#150845",
+                  paddingTop: "10px",
+                }}
+              >
+                First Name
+              </label>
+              <input
+                value={firstname}
                 onChange={(e) => {
-                  setClassRole(e.target.textContent);
-                    setRole(`Class Master [${e.target.textContent}]`)
-                    setShowClass(false)
+                  setFirstName(e.target.value);
+                }}
+                type="text"
+                placeholder="Your name"
+                style={{
+                  fontFamily: "Irish Grover",
+                  border: "1px solid #150845",
+                  padding: "5px 5px",
+                  width: "100%",
+                  height: "7vh",
+                  fontSize: "1.5rem",
+                  borderRadius: "5px",
+                  margin: "5px 0px",
+                  color: "#150845",
                 }}
               />
-            </>
-          ) : (
-            <></>
-          )}
-        </Form>
-        <br />
-        <br />
-        <Button
-          onClick={(e) => {
-            _signUp(e);
-          }}
-        >
-          Done
-        </Button>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
+              <label
+                style={{
+                  fontFamily: "Irish Grover",
+                  textAlign: "left",
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  color: "#150845",
+                  paddingTop: "10px",
+                }}
+              >
+                Last Name
+              </label>
+              <input
+                value={lastname}
+                onChange={(e) => {
+                  setLastName(e.target.value);
+                }}
+                type="text"
+                placeholder="Surname"
+                style={{
+                  fontFamily: "Irish Grover",
+                  border: "1px solid #150845",
+                  padding: "5px 5px",
+                  width: "100%",
+                  height: "7vh",
+                  borderRadius: "5px",
+                  margin: "5px 0px",
+                  fontSize: "1.5rem",
+                  color: "#150845",
+                }}
+              />
+              <label
+                style={{
+                  fontFamily: "Irish Grover",
+                  textAlign: "left",
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  color: "#150845",
+                  paddingTop: "10px",
+                }}
+              >
+                Email
+              </label>
+              <input
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                type="email"
+                placeholder="name@gmail.com"
+                style={{
+                  fontFamily: "Irish Grover",
+                  border: "1px solid #150845",
+                  padding: "5px 5px",
+                  width: "100%",
+                  height: "7vh",
+                  borderRadius: "5px",
+                  margin: "5px 0px",
+                  fontSize: "1.5rem",
+                  color: "#150845",
+                }}
+              />
+              <label
+                style={{
+                  fontFamily: "Irish Grover",
+                  textAlign: "left",
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  color: "#150845",
+                  paddingTop: "10px",
+                }}
+              >
+                Phone Number
+              </label>
+              <input
+                value={phonenumber}
+                onChange={(e) => {
+                  setPhoneNumber(e.target.value);
+                }}
+                type="text"
+                placeholder="[+234] 901 234 5670"
+                style={{
+                  fontFamily: "Irish Grover",
+                  border: "1px solid #150845",
+                  padding: "5px 5px",
+                  width: "100%",
+                  height: "7vh",
+                  borderRadius: "5px",
+                  fontSize: "1.5rem",
+                  margin: "5px 0px",
+                  color: "#150845",
+                }}
+              />
+              <label
+                style={{
+                  fontFamily: "Irish Grover",
+                  textAlign: "left",
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  color: "#150845",
+                  paddingTop: "10px",
+                }}
+              >
+                Gender
+              </label>
+              <select
+                style={{
+                  fontFamily: "Irish Grover",
+                  border: "1px solid #150845",
+                  padding: "5px 5px",
+                  width: "100%",
+                  height: "7vh",
+                  borderRadius: "5px",
+                  fontSize: "1.5rem",
+                  margin: "5px 0px",
+                  color: "#150845",
+                  backgroundColor: "white",
+                }}
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+              <label
+                style={{
+                  fontFamily: "Irish Grover",
+                  textAlign: "left",
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  color: "#150845",
+                  paddingTop: "10px",
+                }}
+              >
+                Role
+              </label>
+              <select
+                onChange={(e) => {
+                  setRole(e.target.value);
+                  if (e.target.value === "Class Master") {
+                    setShowClass(true);
+                  } else if (e.target.value === "Staff") {
+                    setShowClass(false);
+                  }
+                }}
+                style={{
+                  fontFamily: "Irish Grover",
+                  border: "1px solid #150845",
+                  padding: "5px 5px",
+                  width: "100%",
+                  height: "7vh",
+                  borderRadius: "5px",
+                  fontSize: "1.5rem",
+                  margin: "5px 0px",
+                  color: "#150845",
+                  backgroundColor: "white",
+                }}
+              >
+                <option value="Staff">Staff</option>
+                <option value="Class Master">Class Master</option>
+              </select>
+              {showClass === true ? (
+                <>
+                  <select
+                    style={{
+                      fontFamily: "Irish Grover",
+                      border: "1px solid #150845",
+                      padding: "5px 5px",
+                      width: "100%",
+                      height: "7vh",
+                      borderRadius: "5px",
+                      fontSize: "1.5rem",
+                      margin: "5px 0px",
+                      color: "#150845",
+                      backgroundColor: "white",
+                    }}
+                    placeholder="Class"
+                    onChange={(e) => {
+                      setClassRole(e.target.value);
+                      setRole(`Class Master [${e.target.value}]`);
+                      setShowClass(false);
+                    }}
+                  >
+                    <option value="Jss One">Jss One</option>
+                    <option value="Jss Two">Jss Two</option>
+                    <option value="Jss Three">Jss Three</option>
+                    <option value="Sss One">Sss One</option>
+                    <option value="Sss Two">Sss Two</option>
+                    <option value="Sss Three">Sss Three</option>
+                  </select>
+                </>
+              ) : (
+                <></>
+              )}
+              <div
+                onClick={() => {
+                  setTogglePage(!togglePage);
+                }}
+                style={{
+                  fontFamily: "Irish Grover",
+                  color: "white",
+                  backgroundColor: "#150845",
+                  padding: "5px 10px",
+                  textAlign: "center",
+                  width: "50%",
+                  margin: "auto",
+                }}
+              >
+                Next
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "left",
+                justifyContent: "space-around",
+              }}
+            >
+              <span style={{ fontWeight: "800", fontSize: "1.5rem" }}>
+                Available Subjects
+              </span>
+              <div
+                style={{
+                  width: "100%",
+                  height: "30vh",
+                  overflowY: "scroll",
+                }}
+              >
+                {subjects.map((el) => {
+                  return (
+                    <>
+                      <div
+                        onClick={() => {
+                          pickCount(el.text);
+                          setSubjects({
+                            selectedSubjects: [...selectedSubjects, el.text],
+                          });
+                        }}
+                        style={{
+                          fontFamily: "Irish Grover",
+                          color: "white",
+                          backgroundColor: "#150845",
+                          padding: "5px 10px",
+                          textAlign: "center",
+                          margin: "10px",
+                          borderRadius: "5px",
+                        }}
+                      >
+                        {el.text}
+                      </div>
+                    </>
+                  );
+                })}
+              </div>
+              <div
+                style={{ height: "30vh", width: "100%", overflowY: "scroll" }}
+              >
+                <span style={{ fontWeight: "800", fontSize: "1.5rem" }}>
+                  Selected Subjects
+                </span>
+                <div>
+                  {selectedSubjects.map((el) => {
+                    return (
+                      <>
+                        <div
+                          style={{
+                            fontFamily: "Irish Grover",
+                            color: "white",
+                            backgroundColor: "#dbb921",
+                            padding: "5px 10px",
+                            textAlign: "center",
+                            margin: "10px",
+                            color:"#150845",
+                            borderRadius: "5px",
+                          }}
+                        >
+                          {el}
+                        </div>
+                      </>
+                    );
+                  })}
+                </div>
+              </div>
+              <div
+                onClick={() => {
+                  setTogglePage(!togglePage);
+                }}
+                style={{
+                  fontFamily: "Irish Grover",
+                  color: "white",
+                  backgroundColor: "#150845",
+                  padding: "5px 10px",
+                  textAlign: "center",
+                  width: "50%",
+                  margin: "auto",
+                }}
+              >
+                Back
+              </div>
+              <br />
+              <br />
+              <br />
+              <br />
+              <Button
+                onClick={(e) => {
+                  _signUp(e);
+                }}
+              >
+                Done
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
