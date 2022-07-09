@@ -47,7 +47,7 @@ const Student = () => {
           }}
         >
           <div>
-            <h3 style={{ fontFamily: "Irish Grover" }}>Add a Student</h3>
+            <h3 style={{ fontFamily: "Irish Grover", fontSize:"1.5rem", color:"#150845" }}>Add a Student</h3>
           </div>
           <div style={{ width: "80%", margin:"auto" }}>
             <OnboardForm />

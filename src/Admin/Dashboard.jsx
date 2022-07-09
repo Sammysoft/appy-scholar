@@ -12,6 +12,7 @@ import staff from "../svg/staff.svg";
 import student from "../svg/student.svg";
 import stats from "../svg/stats.svg";
 import sliders from "../svg/sliders.svg";
+import chip from "../svg/chip.svg";
 import StudentList from "../components/studentlist";
 import Classes from "./classes";
 import TermConfig from "./terminal-config";
@@ -366,6 +367,35 @@ const AdminDashboard = () => {
                         width="100%"
                       />
                       <span>Download Questions</span>
+                    </div>
+                  </Link>
+                  <Link
+                    onClick={() => {
+                      setScreen("/admin/download/questions");
+                    }}
+                    to="/admin/download/questions"
+                    style={{
+                      textDecoration: "none",
+                      textDecorationLine: "none",
+                      color: "black",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        borderRadius: "5px",
+                        boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
+                      }}
+                    >
+                      <img
+                        src={chip}
+                        alt="download"
+                        height="100px"
+                        width="100%"
+                      />
+                      <span>Config Students</span>
                     </div>
                   </Link>
                 </div>
