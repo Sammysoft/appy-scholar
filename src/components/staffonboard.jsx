@@ -384,7 +384,7 @@ const StaffOnboardForm = () => {
                         onClick={() => {
                           pickCount(el.text);
                           setSubjects({
-                            selectedSubjects: [...selectedSubjects, el.text],
+                            selectedSubjects: [...selectedSubjects, el.text]
                           });
                         }}
                         style={{

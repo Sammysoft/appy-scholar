@@ -39,6 +39,7 @@ const OnboardForm = () => {
   const [showSubject, setShowSubject] = useState(Boolean);
   const [subjectCategory, setSubjectCategory] = useState([]);
   const [subjectElectives, setSubjectElectives] = useState([]);
+  const [subjects, setSubjects] = useState({ selectedSubjects: [] });
   const [category, setCategory] = useState("");
   const [selectableDrawer, setSelectableDrawer] = useState(false);
   const [toggleElectives, setToggleElectives] = useState(false);
@@ -46,7 +47,7 @@ const OnboardForm = () => {
   let coreSubjects = [];
   coreSubjects.push(subjectCategory);
 
-  // const { selectedSubjects } = subject;
+  const { selectedSubjects } = subjects;
 
   const _signUp = (e) => {
     e.preventDefault();
@@ -55,7 +56,7 @@ const OnboardForm = () => {
       firstname,
       lastname,
       gender,
-      studentClass
+      studentClass,
     };
 
     console.log(payload);
@@ -80,7 +81,7 @@ const OnboardForm = () => {
               borderTopRightRadius: "30px",
               display: "grid",
               gridTemplateColumns: "auto auto",
-              padding:"15px",
+              padding: "15px",
               gap: "10px",
             }}
           >
@@ -90,11 +91,16 @@ const OnboardForm = () => {
               return (
                 <>
                   <div
+                    onClick={() => {
+                      setSubjects({
+                        selectedSubjects: [...selectedSubjects, electives],
+                      });
+                    }}
                     style={{
                       backgroundColor: "#150845",
                       color: "white",
                       padding: "5px 10px",
-                      height:"fit-content"
+                      height: "fit-content",
                     }}
                   >
                     {electives}
@@ -142,7 +148,7 @@ const OnboardForm = () => {
                 Core {category} Subjects
               </span>
               <div style={{ height: "80vh", overflowY: "scroll" }}>
-                {subjectCategory.map((subject) => {
+                {selectedSubjects.map((subject) => {
                   return (
                     <>
                       <div
@@ -159,9 +165,21 @@ const OnboardForm = () => {
                     </>
                   );
                 })}
-                {console.log(subjectCategory)}
+                {console.log(selectedSubjects)}
               </div>
-
+                <span
+                onClick={()=>{setSelectableDrawer(false)}}
+                  style={{
+                    backgroundColor: "#150845",
+                    color: "white",
+                    padding: "10px 15px",
+                    fontWeight: "600",
+                    fontSize: "1rem",
+                    marginBottom:"10vh"
+                  }}
+                >
+                  Go Back
+                </span>
               <div
                 onClick={() => {
                   setToggleElectives(!toggleElectives);
@@ -179,7 +197,13 @@ const OnboardForm = () => {
               >
                 {category} Electives
               </div>
-             <Button onClick={()=>{_signUp()}}>Done</Button>
+              <Button
+                onClick={() => {
+                  _signUp();
+                }}
+              >
+                Done
+              </Button>
             </div>
           </>
         ) : (
@@ -451,16 +475,19 @@ const OnboardForm = () => {
                         setSubjectCategory(Arts);
                         setSubjectElectives(ArtsElect);
                         setCategory("Arts");
+                        setSubjects({ selectedSubjects: Arts });
                         console.log(Arts);
                       } else if (e.target.value === "Science") {
                         setSubjectCategory(Science);
                         setSubjectElectives(ScienceElect);
                         setCategory("Science");
+                        setSubjects({ selectedSubjects: Science });
                         console.log(Science);
                       } else if (e.target.value === "Commerce") {
                         setSubjectCategory(Commerce);
                         setSubjectElectives(CommerceElect);
                         setCategory("Commerce");
+                        setSubjects({ selectedSubjects: Commerce });
                         console.log(Commerce);
                       } else {
                         setSubjectCategory(Junior);
