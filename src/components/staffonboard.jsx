@@ -7,6 +7,7 @@ import { api } from "../strings";
 import close from "../svg/close.svg";
 import Swal from "sweetalert2";
 
+
 const Button = styled.span`
   border-radius: 7px;
   padding: 2vh 10vw;
@@ -88,6 +89,15 @@ const StaffOnboardForm = () => {
       console.log("unpicked");
     }
   };
+
+
+
+
+
+
+
+
+
 
   return (
     <>
