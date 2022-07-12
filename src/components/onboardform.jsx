@@ -2,11 +2,14 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "semantic-ui-react";
+import axios from "axios"
 import DatePicker from "react-datepicker";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import "react-datepicker/dist/react-datepicker.css";
 import star from "../svg/star.svg";
+import { api } from "./../strings";
 import {
   Junior,
   Science,
@@ -38,8 +41,6 @@ const Button = styled.span`
   text-align: center;
 `;
 
-var fileReader = new FileReader();
-
 const OnboardForm = () => {
   const pick = useRef("");
 
@@ -47,7 +48,9 @@ const OnboardForm = () => {
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [phonenumber, setPhoneNumber] = useState("");
+  const [imageLoad, setImageLoad] = useState(false);
   const [email, setEmail] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
   const [gender, setGender] = useState("");
   const [studentClass, setStudentClass] = useState("");
   const [showSubject, setShowSubject] = useState(Boolean);
@@ -75,21 +78,43 @@ const OnboardForm = () => {
       email,
       gender,
       studentClass,
-      picture,
+      dateofbirth: startDate,
+      profilePicture,
+      subjects:selectedSubjects,
+      phonenumber
     };
 
     console.log(payload);
-    navigate(-1);
+    axios.post(`${api}/students/add`, payload).then((res)=>{
+      let studentID = res.data.data._id
+      axios.post(`${api}/subjects/add`, {firstname, lastname, subjects, studentID}).then((res=>{
+        Swal.fire({
+          title: "Fully registered  👍",
+          text: res.data.data
+        })
+        navigate("/master/students");
+      })).catch(error=>{
+        Swal.fire({
+          title:"Oops 😥",
+          text: error.response.data.data
+        })
+      })
+    }).catch(error=>{
+      Swal.fire({
+        title: "Oops 😥",
+        text: error.response.data.data
+      })
+    })
+
   };
 
   const uploadFile = () => {
-    // setIsLoadingImage(true);
+    setImageLoad(true);
     if (pickFile == null) {
       return null;
     } else {
       const imageRef = ref(getStorage(), `images/${pickFile.name + v4()}`);
       const uploadTask = uploadBytesResumable(imageRef, pickFile);
-
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -112,14 +137,14 @@ const OnboardForm = () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log("File available at", downloadURL);
             Swal.fire({
-              icon: "success",
-              text: "Successfully uploaded your profile picture",
-              title: "Image uploaded to the Cloud",
+              text: "Successfully uploaded image to the cloud!",
+              title: "Image uploaded 👍",
               timmer: 1500,
               position: "top-right",
             });
             setPicture(downloadURL);
-            // setIsLoadingImage(false);
+            setProfilePicture(downloadURL);
+            setImageLoad(false);
           });
         }
       );
@@ -187,13 +212,6 @@ const OnboardForm = () => {
         <></>
       )}
       <div>
-        {/* <Button
-            onClick={(e) => {
-              _signUp(e);
-            }}
-          >
-            Done
-          </Button> */}
         {selectableDrawer === true ? (
           <>
             <div
@@ -238,7 +256,6 @@ const OnboardForm = () => {
                     </>
                   );
                 })}
-                {console.log(selectedSubjects)}
               </div>
               <span
                 onClick={() => {
@@ -272,13 +289,6 @@ const OnboardForm = () => {
               >
                 {category} Electives
               </div>
-              <Button
-                onClick={(e) => {
-                  _signUp(e);
-                }}
-              >
-                Done
-              </Button>
             </div>
           </>
         ) : (
@@ -307,36 +317,94 @@ const OnboardForm = () => {
                   height: "25vh",
                   position: "relative",
                   borderRadius: "50%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                   margin: "auto",
                 }}
               >
-                <img
-                  src={picture}
-                  alt="profile"
-                  height="100%"
-                  width="100%"
-                  style={{ borderRadius: "50%", border: "4px solid #150845" }}
-                />
-                <span
-                  onClick={() => {
-                    pick.current.click();
-                  }}
-                  style={{
-                    position: "absolute",
-                    backgroundColor: "#150845",
-                    padding: "5px 10px",
-                    color: "white",
-                    fontFamily: "Irish Grover",
-                    borderRadius: "7px",
-                    bottom: "10px",
-                    right: "-5px",
-                  }}
-                >
-                  Add Picture
-                </span>
+                {imageLoad === true ? (
+                  <>
+                    <Loader active inline="centered" />
+                  </>
+                ) : (
+                  <>
+                    <img
+                      src={picture}
+                      alt="profile"
+                      height="100%"
+                      width="100%"
+                      style={{
+                        borderRadius: "50%",
+                        border: "4px solid #150845",
+                        padding: "0px",
+                      }}
+                    />
+
+                    {picture === "/images/profile.jpg" ? (
+                      <>
+                        <span
+                          onClick={() => {
+                            pick.current.click();
+                          }}
+                          style={{
+                            position: "absolute",
+                            backgroundColor: "#150845",
+                            padding: "5px 10px",
+                            color: "white",
+                            fontFamily: "Irish Grover",
+                            borderRadius: "7px",
+                            bottom: "10px",
+                            right: "-5px",
+                          }}
+                        >
+                          Add Picture
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span
+                          onClick={() => {
+                            uploadFile();
+                          }}
+                          style={{
+                            position: "absolute",
+                            backgroundColor: "#150845",
+                            padding: "5px 10px",
+                            color: "white",
+                            fontFamily: "Irish Grover",
+                            borderRadius: "7px",
+                            bottom: "10px",
+                            right: "-5px",
+                          }}
+                        >
+                          Upload
+                        </span>
+                        <span
+                          onClick={() => {
+                            pick.current.click();
+                          }}
+                          style={{
+                            position: "absolute",
+                            backgroundColor: "#150845",
+                            padding: "5px 10px",
+                            color: "white",
+                            fontFamily: "Irish Grover",
+                            borderRadius: "7px",
+                            bottom: "10px",
+                            left: "-5px",
+                          }}
+                        >
+                          Change
+                        </span>
+                      </>
+                    )}
+                  </>
+                )}
                 <input
                   onChange={(e) => {
                     handlePictureChange(e);
+                    setPickFile(e.target.files[0]);
                   }}
                   ref={pick}
                   style={{ display: "none" }}
@@ -344,6 +412,36 @@ const OnboardForm = () => {
                   accept="image/*"
                 />
               </div>
+              <label
+                style={{
+                  display:"none",
+                  fontFamily: "Irish Grover",
+                  textAlign: "left",
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  color: "#150845",
+                  paddingTop: "10px",
+                }}
+              >
+                Image Url
+              </label>
+              <input
+                style={{
+                  display:"none",
+                  fontFamily: "Irish Grover",
+                  border: "1px solid #150845",
+                  padding: "5px 5px",
+                  width: "100%",
+                  height: "7vh",
+                  fontSize: "1.5rem",
+                  borderRadius: "5px",
+                  margin: "5px 0px",
+                  color: "#150845",
+                }}
+                type="text"
+                placeholder="Image URL"
+                value={profilePicture}
+              />
               <label
                 style={{
                   fontFamily: "Irish Grover",
@@ -509,7 +607,7 @@ const OnboardForm = () => {
                 Gender
               </label>
               <select
-              placeholder="Gender"
+                placeholder="Gender"
                 onChange={(e) => {
                   setGender(e.target.value);
                 }}
@@ -543,7 +641,7 @@ const OnboardForm = () => {
                 Class
               </label>
               <select
-              placeholder="Class"
+                placeholder="Class"
                 onChange={(e) => {
                   setStudentClass(e.target.value);
                   if (
@@ -598,22 +696,22 @@ const OnboardForm = () => {
                         setSubjectElectives(ArtsElect);
                         setCategory("Arts");
                         setSubjects({ selectedSubjects: Arts });
-                        console.log(Arts);
+
                       } else if (e.target.value === "Science") {
                         setSubjectCategory(Science);
                         setSubjectElectives(ScienceElect);
                         setCategory("Science");
                         setSubjects({ selectedSubjects: Science });
-                        console.log(Science);
+
                       } else if (e.target.value === "Commerce") {
                         setSubjectCategory(Commerce);
                         setSubjectElectives(CommerceElect);
                         setCategory("Commerce");
                         setSubjects({ selectedSubjects: Commerce });
-                        console.log(Commerce);
+
                       } else {
                         setSubjectCategory(Junior);
-                        console.log(Junior);
+
                       }
                     }}
                     style={{
@@ -650,6 +748,14 @@ const OnboardForm = () => {
               ) : (
                 <></>
               )}
+              <br />
+              <Button
+                onClick={(e) => {
+                  _signUp(e);
+                }}
+              >
+                Done
+              </Button>
             </div>
           </>
         )}

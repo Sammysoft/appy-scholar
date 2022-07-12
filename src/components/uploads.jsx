@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { api } from "../strings";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
 import Uploads from "./upload";
@@ -21,32 +23,35 @@ const ScreenWrapper = styled.div`
 const Classes = () => {
   const navigate = useNavigate();
   const [classData, setClassData] = useState(null);
+  const [students, setStudents] = useState([]);
   const [toggleSelect, setToggleSelect] = useState(false);
 
   useEffect(() => {
+    axios.get(`${api}/students/`).then((res) => {
+      setStudents(res.data.data);
+    });
     setClassData(classData);
   }, [classData]);
 
   return (
     <>
       <ScreenWrapper>
-
-          <div
-            style={{
-              width: "100%",
-              height: "5vh",
-              textAlign: "left",
-              position: "relative",
-              marginTop: "0px",
-            }}
-          >
-            <span onClick={() => navigate(-1)}>
-              <img
-                style={{ borderRadius: "5px" }}
-                src={leftarrow}
-                alt="pointer"
-              />
-            </span>
+        <div
+          style={{
+            width: "100%",
+            height: "5vh",
+            textAlign: "left",
+            position: "relative",
+            marginTop: "0px",
+          }}
+        >
+          <span onClick={() => navigate(-1)}>
+            <img
+              style={{ borderRadius: "5px" }}
+              src={leftarrow}
+              alt="pointer"
+            />
+          </span>
           <div
             style={{
               width: "100%",
@@ -82,26 +87,16 @@ const Classes = () => {
               </>
             ) : (
               <>
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
-                <Uploads />
+                {students.map((stud) => {
+                  return (
+                    <>
+                      <Uploads
+                        studentname={`${stud.firstname} ${stud.lastname}`}
+                        profilepicture = {stud.profilePicture}
+                      />
+                    </>
+                  );
+                })}
               </>
             )}
           </div>

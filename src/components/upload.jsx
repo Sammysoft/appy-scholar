@@ -4,7 +4,7 @@ import send from "../svg/send.svg";
 import calculator from "../svg/calculator.svg";
 import Swal from "sweetalert2";
 
-const Uploads = () => {
+const Uploads = ({ studentname, profilepicture }) => {
   const [loading, setLoading] = useState(false);
   const [changeState, setChangeState] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -70,13 +70,13 @@ const Uploads = () => {
                 }}
               >
                 <img
-                  src="/images/profile.jpg"
+                  src={profilepicture}
                   alt="profile"
                   height="20px"
                   width="20px"
                   style={{ borderRadius: "10px" }}
                 />
-                <span>Adetunji Michael</span>
+                <span>{studentname}</span>
               </div>
               {loading === true ? (
                 <>
@@ -200,13 +200,13 @@ const Uploads = () => {
               }}
             >
               <img
-                src="/images/profile.jpg"
+                src={profilepicture}
                 alt="profile"
                 height="20px"
                 width="20px"
                 style={{ borderRadius: "10px" }}
               />
-              <span>Adetunji Michael</span>
+              <span>{studentname}</span>
               </div>
               <div>
                 <span>Uploaded Succesfully</span>
