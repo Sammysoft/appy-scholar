@@ -193,8 +193,10 @@ const OnboardForm = () => {
                 height: "90vh",
               }}
             >
+                <div>
                 <Loader active inline="centered" />
                 <span>Please Wait...</span>
+                </div>
 
             </div>
     </>:<>
