@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Loader } from "semantic-ui-react";
 import send from "../svg/send.svg";
 import calculator from "../svg/calculator.svg";
 import Swal from "sweetalert2";
-import axios from "axios";
-import { api } from "../strings";
+// import axios from "axios";
+// import { api } from "../strings";
 
-const Uploads = ({ studentname, profilepicture, studentID  }) => {
+const Uploads = ({ studentname, studentID }) => {
   const [loading, setLoading] = useState(false);
   const [changeState, setChangeState] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -47,17 +47,16 @@ const Uploads = ({ studentname, profilepicture, studentID  }) => {
     console.log(payload);
   };
 
-  useEffect(() => {
-    axios.post(`${api}/subjects/`, { studentID }).then((res) => {
-      console.log(res.data);
-    });
-  }, [studentID]);
+  // useEffect(() => {
+  //   axios.post(`${api}/subjects/`, { studentID }).then((res) => {
+  //     console.log(res.data);
+  //   });
+  // }, [studentID]);
 
 
 
   return (
     <>
-    {console.log(profilepicture)}
       <div
         style={{
           display: "flex",
@@ -81,13 +80,13 @@ const Uploads = ({ studentname, profilepicture, studentID  }) => {
                   alignItems: "center",
                 }}
               >
-                <img
+                {/* <img
                   src={profilepicture}
                   alt="profile"
                   height="20px"
                   width="20px"
                   style={{ borderRadius: "10px" }}
-                />
+                /> */}
                 <span>{studentname}</span>
               </div>
               {loading === true ? (
@@ -211,13 +210,13 @@ const Uploads = ({ studentname, profilepicture, studentID  }) => {
                 alignItems: "center",
               }}
             >
-              <img
+              {/* <img
                 src={profilepicture}
                 alt="profile"
                 height="20px"
                 width="20px"
                 style={{ borderRadius: "10px" }}
-              />
+              /> */}
               <span>{studentname}</span>
             </div>
             <div>

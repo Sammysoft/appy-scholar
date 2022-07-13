@@ -63,6 +63,7 @@ const OnboardForm = () => {
   const [toggleElectives, setToggleElectives] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [pickFile, setPickFile] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   let coreSubjects = [];
   coreSubjects.push(subjectCategory);
@@ -71,6 +72,7 @@ const OnboardForm = () => {
 
   const _signUp = (e) => {
     e.preventDefault();
+    setLoading(true)
 
     const payload = {
       firstname,
@@ -98,13 +100,15 @@ const OnboardForm = () => {
             studentClass,
           })
           .then((res) => {
+            navigate("/master/students");
+            setLoading(false)
             Swal.fire({
               title: "Fully registered  👍",
               text: res.data.data,
             });
-            navigate("/master/students");
           })
           .catch((error) => {
+            setLoading(false)
             Swal.fire({
               title: "Oops 😥",
               text: error.response.data.data,
@@ -112,6 +116,7 @@ const OnboardForm = () => {
           });
       })
       .catch((error) => {
+        setLoading(false)
         Swal.fire({
           title: "Oops 😥",
           text: error.response.data.data,
@@ -173,8 +178,27 @@ const OnboardForm = () => {
   };
 
   return (
+
+
+
     <>
-      {toggleElectives === true ? (
+    {loading === true ? <>
+      <div
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "left",
+                justifyContent: "space-around",
+                height: "90vh",
+              }}
+            >
+                <Loader active inline="centered" />
+                <span>Please Wait...</span>
+
+            </div>
+    </>:<>
+    {toggleElectives === true ? (
         <>
           <div
             style={{
@@ -770,6 +794,8 @@ const OnboardForm = () => {
           </>
         )}
       </div>
+    </>}
+
     </>
   );
 };
