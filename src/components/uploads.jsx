@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState  } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2"
 import { api } from "../strings";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
@@ -20,18 +21,28 @@ const ScreenWrapper = styled.div`
   position: relative;
 `;
 
+
+
+
 const Classes = () => {
+
   const navigate = useNavigate();
   const [classData, setClassData] = useState(null);
   const [students, setStudents] = useState([]);
   const [toggleSelect, setToggleSelect] = useState(false);
 
-  useEffect(() => {
-    axios.get(`${api}/students/`).then((res) => {
+
+  const _handleStudents = (value) =>{
+    axios.post(`${api}/classes/students/`, {value}).then((res) => {
       setStudents(res.data.data);
-    });
-    setClassData(classData);
-  }, [classData]);
+      console.log(res.data.data)
+    }).catch(error=>{
+      Swal.fire({
+        title: "Oops 😥",
+        text: error.response.data.data
+      })
+    })}
+
 
   return (
     <>
@@ -91,8 +102,8 @@ const Classes = () => {
                   return (
                     <>
                       <Uploads
-                        studentname={`${stud.firstname} ${stud.lastname}`}
-                        profilepicture = {stud.profilePicture}
+                        studentID={stud._id}
+                        studentname={stud.studentname}
                       />
                     </>
                   );
@@ -148,6 +159,7 @@ const Classes = () => {
                 onClick={() => {
                   setToggleSelect(!toggleSelect);
                   setClassData("Mathematics [Jss One]");
+                  _handleStudents("Mathematics [Jss One]")
                 }}
                 style={{
                   padding: "10px",

@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "semantic-ui-react";
-import axios from "axios"
+import axios from "axios";
 import DatePicker from "react-datepicker";
 import styled from "styled-components";
 import Swal from "sweetalert2";
@@ -80,32 +80,43 @@ const OnboardForm = () => {
       studentClass,
       dateofbirth: startDate,
       profilePicture,
-      subjects:selectedSubjects,
-      phonenumber
+      subjects: selectedSubjects,
+      phonenumber,
     };
 
     console.log(payload);
-    axios.post(`${api}/students/add`, payload).then((res)=>{
-      let studentID = res.data.data._id
-      axios.post(`${api}/subjects/add`, {firstname, lastname, subjects, studentID}).then((res=>{
-        Swal.fire({
-          title: "Fully registered  👍",
-          text: res.data.data
-        })
-        navigate("/master/students");
-      })).catch(error=>{
-        Swal.fire({
-          title:"Oops 😥",
-          text: error.response.data.data
-        })
+    axios
+      .post(`${api}/students/add`, payload)
+      .then((res) => {
+        let studentID = res.data.data._id;
+        axios
+          .post(`${api}/subjects/add`, {
+            firstname,
+            lastname,
+            subjects,
+            studentID,
+            studentClass,
+          })
+          .then((res) => {
+            Swal.fire({
+              title: "Fully registered  👍",
+              text: res.data.data,
+            });
+            navigate("/master/students");
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: "Oops 😥",
+              text: error.response.data.data,
+            });
+          });
       })
-    }).catch(error=>{
-      Swal.fire({
-        title: "Oops 😥",
-        text: error.response.data.data
-      })
-    })
-
+      .catch((error) => {
+        Swal.fire({
+          title: "Oops 😥",
+          text: error.response.data.data,
+        });
+      });
   };
 
   const uploadFile = () => {
@@ -414,7 +425,7 @@ const OnboardForm = () => {
               </div>
               <label
                 style={{
-                  display:"none",
+                  display: "none",
                   fontFamily: "Irish Grover",
                   textAlign: "left",
                   fontSize: "1.5rem",
@@ -427,7 +438,7 @@ const OnboardForm = () => {
               </label>
               <input
                 style={{
-                  display:"none",
+                  display: "none",
                   fontFamily: "Irish Grover",
                   border: "1px solid #150845",
                   padding: "5px 5px",
@@ -650,6 +661,9 @@ const OnboardForm = () => {
                     e.target.value === "Jss Three"
                   ) {
                     setShowSubject(false);
+                    setSubjectCategory(Junior);
+                    setSubjects({ selectedSubjects: Junior });
+                    console.log(subjects);
                   } else {
                     setShowSubject(true);
                   }
@@ -696,22 +710,18 @@ const OnboardForm = () => {
                         setSubjectElectives(ArtsElect);
                         setCategory("Arts");
                         setSubjects({ selectedSubjects: Arts });
-
                       } else if (e.target.value === "Science") {
                         setSubjectCategory(Science);
                         setSubjectElectives(ScienceElect);
                         setCategory("Science");
                         setSubjects({ selectedSubjects: Science });
-
                       } else if (e.target.value === "Commerce") {
                         setSubjectCategory(Commerce);
                         setSubjectElectives(CommerceElect);
                         setCategory("Commerce");
                         setSubjects({ selectedSubjects: Commerce });
-
                       } else {
-                        setSubjectCategory(Junior);
-
+                        return null;
                       }
                     }}
                     style={{

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Loader } from "semantic-ui-react";
 import send from "../svg/send.svg";
 import calculator from "../svg/calculator.svg";
 import Swal from "sweetalert2";
+import axios from "axios";
+import { api } from "../strings";
 
-const Uploads = ({ studentname, profilepicture }) => {
+const Uploads = ({ studentname, profilepicture, studentID  }) => {
   const [loading, setLoading] = useState(false);
   const [changeState, setChangeState] = useState(false);
   const [toggle, setToggle] = useState(false);
@@ -13,8 +15,10 @@ const Uploads = ({ studentname, profilepicture }) => {
   const [exam, setExam] = useState(null);
   const [total, setTotal] = useState(null);
 
+
+
   const _computeTotal = (e) => {
-      e.preventDefault()
+    e.preventDefault();
     if (firstCA !== null && secondCA !== null && exam !== null) {
       setTotal(Number(firstCA) + Number(secondCA) + Number(exam));
       setToggle(!toggle);
@@ -31,7 +35,7 @@ const Uploads = ({ studentname, profilepicture }) => {
     setLoading(true);
     setInterval(() => {
       setChangeState(true);
-      setLoading(false)
+      setLoading(false);
     }, 3000);
 
     const payload = {
@@ -43,13 +47,22 @@ const Uploads = ({ studentname, profilepicture }) => {
     console.log(payload);
   };
 
+  useEffect(() => {
+    axios.post(`${api}/subjects/`, { studentID }).then((res) => {
+      console.log(res.data);
+    });
+  }, [studentID]);
+
+
+
   return (
     <>
+    {console.log(profilepicture)}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
-          flexDirection :"row",
+          flexDirection: "row",
           alignItems: "center",
           width: "100%",
           padding: "5px",
@@ -64,7 +77,6 @@ const Uploads = ({ studentname, profilepicture }) => {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
@@ -85,78 +97,78 @@ const Uploads = ({ studentname, profilepicture }) => {
               ) : (
                 <>
                   <div>
-                   <form>
-                   <input
-                      style={{
-                        width: "10vw",
-                        padding: "5px",
-                        margin: "3px",
-                        borderRadius: "5px",
-                        border: "1px solid #150845",
-                        color: "#150845",
-                      }}
-                      type="number"
-                      min={0}
-                      max={20}
-                      placeholder="1st CA"
-                      value={firstCA}
-                      onChange={(e) => {
-                        setFirstCA(e.target.value);
-                      }}
-                    />
-                    <input
-                      style={{
-                        width: "10vw",
-                        padding: "5px",
-                        margin: "3px",
-                        borderRadius: "5px",
-                        border: "1px solid #150845",
-                        color: "#150845",
-                      }}
-                      type="number"
-                      placeholder="2nd CA"
-                      value={secondCA}
-                      min={0}
-                      max={20}
-                      onChange={(e) => {
-                        setSecondCA(e.target.value);
-                      }}
-                    />
-                    <input
-                      style={{
-                        width: "10vw",
-                        padding: "5px",
-                        margin: "3px",
-                        borderRadius: "5px",
-                        border: "1px solid #150845",
-                        color: "#150845",
-                      }}
-                      type="number"
-                      placeholder="Exam"
-                      value={exam}
-                      min={1}
-                      max={60}
-                      onChange={(e) => {
-                        setExam(e.target.value);
-                      }}
-                    />
-                    <input
-                      style={{
-                        width: "10vw",
-                        padding: "5px",
-                        margin: "3px",
-                        borderRadius: "5px",
-                        border: "1px solid #150845",
-                        color: "#150845",
-                      }}
-                      type="number"
-                      placeholder="Total"
-                      value={total}
-                      min={1}
-                      max={100}
-                      onChange={""}
-                    />
-                   </form>
+                    <form>
+                      <input
+                        style={{
+                          width: "10vw",
+                          padding: "5px",
+                          margin: "3px",
+                          borderRadius: "5px",
+                          border: "1px solid #150845",
+                          color: "#150845",
+                        }}
+                        type="number"
+                        min={0}
+                        max={20}
+                        placeholder="1st CA"
+                        value={firstCA}
+                        onChange={(e) => {
+                          setFirstCA(e.target.value);
+                        }}
+                      />
+                      <input
+                        style={{
+                          width: "10vw",
+                          padding: "5px",
+                          margin: "3px",
+                          borderRadius: "5px",
+                          border: "1px solid #150845",
+                          color: "#150845",
+                        }}
+                        type="number"
+                        placeholder="2nd CA"
+                        value={secondCA}
+                        min={0}
+                        max={20}
+                        onChange={(e) => {
+                          setSecondCA(e.target.value);
+                        }}
+                      />
+                      <input
+                        style={{
+                          width: "10vw",
+                          padding: "5px",
+                          margin: "3px",
+                          borderRadius: "5px",
+                          border: "1px solid #150845",
+                          color: "#150845",
+                        }}
+                        type="number"
+                        placeholder="Exam"
+                        value={exam}
+                        min={1}
+                        max={60}
+                        onChange={(e) => {
+                          setExam(e.target.value);
+                        }}
+                      />
+                      <input
+                        style={{
+                          width: "10vw",
+                          padding: "5px",
+                          margin: "3px",
+                          borderRadius: "5px",
+                          border: "1px solid #150845",
+                          color: "#150845",
+                        }}
+                        type="number"
+                        placeholder="Total"
+                        value={total}
+                        min={1}
+                        max={100}
+                        onChange={""}
+                      />
+                    </form>
                   </div>
                   <div>
                     {toggle === true ? (
@@ -194,7 +206,7 @@ const Uploads = ({ studentname, profilepicture }) => {
             <div
               style={{
                 display: "flex",
-                flexDirection :"row",
+                flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
               }}
@@ -207,11 +219,11 @@ const Uploads = ({ studentname, profilepicture }) => {
                 style={{ borderRadius: "10px" }}
               />
               <span>{studentname}</span>
-              </div>
-              <div>
-                <span>Uploaded Succesfully</span>
-              </div>
-              <div>👍</div>
+            </div>
+            <div>
+              <span>Uploaded Succesfully</span>
+            </div>
+            <div>👍</div>
           </>
         )}
       </div>

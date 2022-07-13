@@ -11,7 +11,6 @@ export const subjects = [
   { key: "t", text: "Accounting", value: "Acct" },
   { key: "r", text: "Commerce", value: "Com" },
 ];
-
 export const Junior = [
   "Mathematics",
   "English",
