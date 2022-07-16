@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -11,6 +11,7 @@ import list from "../svg/list.svg";
 import Upload from "../components/uploads";
 import Subjects from "../components/subjects";
 import NavigatorRouter from "../screens/Navigator";
+import { LoginContext } from "../loginContext";
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -25,6 +26,7 @@ const ScreenWrapper = styled.div`
 `;
 
 const StaffDashboard = () => {
+  const {user} = useContext(LoginContext);
   const location = useLocation();
   const thisRoute = location.pathname;
   const [screen, setScreen] = useState(`${thisRoute}`);
@@ -117,10 +119,10 @@ const StaffDashboard = () => {
                   border: "1px solid black",
                   position: "absolute",
                   bottom: "-5vh",
-                  backgroundImage: `url(/images/profile.jpg)`,
+                  backgroundImage: `url(${user.profilepicture})`,
                   backgroundRepeat: "no-repeat",
-                  backgroundPosition: "contain",
-                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundSize: "100%",
                   textAlign: "center",
                   display: "flex",
                   justifyContent: "center",
@@ -140,7 +142,7 @@ const StaffDashboard = () => {
             >
               <div>
                 <h3 style={{ fontFamily: "Irish Grover" }}>
-                  Welcome, Miss Tina{" "}
+                  Welcome, {user.username}{" "}
                 </h3>
               </div>
 

@@ -1,7 +1,24 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable */
+
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { Loader } from "semantic-ui-react";
+import Swal from "sweetalert2";
 import star from "../svg/star.svg";
 import send from "../svg/send.svg";
+import { storage } from "../firebase";
+import axios from "axios";
+import { api } from "../strings";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  getStorage,
+} from "firebase/storage";
+
+import { v4 } from "uuid";
+import { Navigate } from "react-router-dom";
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -16,11 +33,122 @@ const ScreenWrapper = styled.div`
 `;
 
 const SettingsScreen = () => {
+  const pick = useRef("");
   const [toggle, setToggle] = useState("");
+  const [password, setPassword] = useState(null);
+  const [confirmpassword, setConfirmPassword] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [phonenumber, setPhonenumber] = useState();
+  const [picture, setPicture] = useState("/images/profile.jpg");
+  const [firstname, setFirstname] = useState("");
+  const [maritalstatus, setMaritalStatus] = useState("");
+  const [gender, setGender] = useState("");
+  const [profilepicture, setProfilePicture] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [pickFile, setPickFile] = useState(null);
+  const [imageLoad, setImageLoad] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const id = window.location.pathname.slice(-24);
+  const Navigate = useNavigate()
 
   useEffect(() => {
-    setToggle("");
+    setToggle("User");
   }, []);
+
+  const uploadFile = () => {
+    setImageLoad(true);
+    if (pickFile == null) {
+      return null;
+    } else {
+      const imageRef = ref(getStorage(), `staffs/${pickFile.name + v4()}`);
+      const uploadTask = uploadBytesResumable(imageRef, pickFile);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + Math.round(progress) + "% done");
+          setUploadStatus(`Uploading ${Math.round(progress)}% done`);
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              setUploadStatus("Upload Paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              // setUploadStatus("Uploading...");
+              break;
+          }
+        },
+        (error) => {
+          alert("Sorry, upload denied at the moment, Please try again later!");
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            Swal.fire({
+              text: "Successfully uploaded image to the cloud!",
+              title: "Image uploaded 👍",
+            });
+            setPicture(downloadURL);
+            setProfilePicture(downloadURL);
+            setImageLoad(false);
+          });
+        }
+      );
+    }
+  };
+
+  const handlePictureChange = (e) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setPicture(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
+  const _checkPassword = (pass1, pass2) => {
+    setLoading(true);
+    if (pass1 !== pass2) {
+      Swal.fire({
+        title: "Password Mismatch 😒",
+        text: "Make sure your password is the same",
+      });
+      setToggle("User");
+    } else if (pass1 === pass2 && pass1 !== null) {
+      const payload = {
+        username,
+        password,
+        profilepicture,
+        gender,
+        firstname,
+        lastname,
+        maritalstatus,
+        email,
+      };
+      console.log(payload);
+
+      axios
+        .post(`${api}/staffs/update/${id}`, payload)
+        .then((res) => {
+          Navigate("/auth");
+          Swal.fire({
+            title: `Welcome onboard ${res.data.data.username} 🎊🎊`,
+            text: "Enjoy the best of your time 🤗🤗🤗",
+          });
+        })
+        .catch((error) => {
+          Swal.fire({
+            title: "Oops 😞",
+            text: error.response.data.data,
+          });
+        });
+    }
+  };
 
   return (
     <>
@@ -58,28 +186,105 @@ const SettingsScreen = () => {
               style={{
                 width: "200px",
                 height: "200px",
-                backgroundImage: `url(/images/profile.jpg)`,
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-                borderRadius: "200px",
                 position: "relative",
+                borderRadius: "200px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                margin: "auto",
               }}
             >
-              <div
-                style={{ position: "absolute", right: "15px", bottom: "10px" }}
-              >
-                <span
-                  style={{
-                    color: "white",
-                    backgroundColor: "#150845 ",
-                    padding: "5px 10px",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Change
-                </span>
-              </div>
+              {imageLoad === true ? (
+                <>
+                  <div>
+                    <Loader active inline="centered" />
+                    <span style={{ opacity: 0.3, color:"white" }}>{uploadStatus}</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <img
+                    src={picture}
+                    alt="profile"
+                    height="100%"
+                    width="100%"
+                    style={{
+                      borderRadius: "50%",
+                      border: "4px solid #150845",
+                      padding: "0px",
+                    }}
+                  />
+
+                  {picture === "/images/profile.jpg" ? (
+                    <>
+                      <span
+                        onClick={() => {
+                          pick.current.click();
+                        }}
+                        style={{
+                          position: "absolute",
+                          backgroundColor: "#150845",
+                          padding: "5px 10px",
+                          color: "white",
+                          fontFamily: "Irish Grover",
+                          borderRadius: "7px",
+                          bottom: "10px",
+                          right: "-5px",
+                        }}
+                      >
+                        Change Picture
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span
+                        onClick={() => {
+                          uploadFile();
+                        }}
+                        style={{
+                          position: "absolute",
+                          backgroundColor: "#150845",
+                          padding: "5px 10px",
+                          color: "white",
+                          fontFamily: "Irish Grover",
+                          borderRadius: "7px",
+                          bottom: "10px",
+                          right: "-5px",
+                        }}
+                      >
+                        Upload
+                      </span>
+                      <span
+                        onClick={() => {
+                          pick.current.click();
+                        }}
+                        style={{
+                          position: "absolute",
+                          backgroundColor: "#150845",
+                          padding: "5px 10px",
+                          color: "white",
+                          fontFamily: "Irish Grover",
+                          borderRadius: "7px",
+                          bottom: "10px",
+                          left: "-5px",
+                        }}
+                      >
+                        Change
+                      </span>
+                    </>
+                  )}
+                </>
+              )}
+              <input
+                onChange={(e) => {
+                  handlePictureChange(e);
+                  setPickFile(e.target.files[0]);
+                }}
+                ref={pick}
+                style={{ display: "none" }}
+                type="file"
+                accept="image/*"
+              />
             </div>
           </div>
           <div
@@ -126,8 +331,17 @@ const SettingsScreen = () => {
                       <img src={star} alt="star" height="20" />
                     </span>
                   </div>
+                  <input
+                    type="text"
+                    value={profilepicture}
+                    style={{ display: "none" }}
+                  />
                   <label>First Name</label>
                   <input
+                    value={firstname}
+                    onChange={(e) => {
+                      setFirstname(e.target.value);
+                    }}
                     type="text"
                     placeholder="First Name"
                     style={{
@@ -141,6 +355,10 @@ const SettingsScreen = () => {
                   />
                   <label>Last Name</label>
                   <input
+                    value={lastname}
+                    onChange={(e) => {
+                      setLastname(e.target.value);
+                    }}
                     type="text"
                     placeholder="Last Name"
                     style={{
@@ -154,6 +372,10 @@ const SettingsScreen = () => {
                   />
                   <label>Marital Status</label>
                   <select
+                    value={maritalstatus}
+                    onChange={(e) => {
+                      setMaritalStatus(e.target.value);
+                    }}
                     style={{
                       padding: "15px",
                       border: "2px solid #150845",
@@ -164,13 +386,17 @@ const SettingsScreen = () => {
                       backgroundColor: "white",
                     }}
                   >
-                    <option>Married</option>
-                    <option>Single</option>
-                    <option>Divorced</option>
-                    <option>Engaged</option>
+                    <option value="Married">Married</option>
+                    <option value="Single">Single</option>
+                    <option value="Divorced">Divorced</option>
+                    <option value="Engaged">Engaged</option>
                   </select>
                   <label>Gender</label>
                   <select
+                    value={gender}
+                    onChange={(e) => {
+                      setGender(e.target.value);
+                    }}
                     style={{
                       padding: "15px",
                       border: "2px solid #150845",
@@ -181,11 +407,15 @@ const SettingsScreen = () => {
                       backgroundColor: "white",
                     }}
                   >
-                    <option>Male</option>
-                    <option>Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
                   </select>
                   <label>Phone Number</label>
                   <input
+                    value={phonenumber}
+                    onChange={(e) => {
+                      setPhonenumber(e.target.value);
+                    }}
                     type="text"
                     placeholder="+234 90 123 456 78"
                     style={{
@@ -199,6 +429,10 @@ const SettingsScreen = () => {
                   />
                   <label>Email</label>
                   <input
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
                     type="text"
                     placeholder="name@gmail.com"
                     style={{
@@ -260,6 +494,10 @@ const SettingsScreen = () => {
                   </div>
                   <label>User Name</label>
                   <input
+                    value={username}
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
                     type="text"
                     placeholder="Username"
                     style={{
@@ -271,7 +509,7 @@ const SettingsScreen = () => {
                       color: "#150845",
                     }}
                   />
-                  <label>Old Password</label>
+                  {/* <label>Old Password</label>
                   <input
                     type="password"
                     placeholder="Secret"
@@ -283,10 +521,14 @@ const SettingsScreen = () => {
                       marginBottom: "5vh",
                       color: "#150845",
                     }}
-                  />
+                  /> */}
                   <label>New Password</label>
                   <input
                     type="password"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
                     placeholder="New Secret"
                     style={{
                       padding: "15px",
@@ -299,6 +541,10 @@ const SettingsScreen = () => {
                   />
                   <label>Confirm Password</label>
                   <input
+                    value={confirmpassword}
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value);
+                    }}
                     type="password"
                     placeholder="Confirm New Secret"
                     style={{
@@ -328,57 +574,60 @@ const SettingsScreen = () => {
               </>
             ) : (
               <>
-                <div style={{width:"100%"}}>
-                  <div style={{height :"25vh"}}>
-                  <div
-                  onClick={()=>{setToggle("Bio")}}
-                    style={{
-                      width: "80%",
-                      textAlign: "center",
-                      padding: "20px",
-                      display: "flex",
-                      margin:"auto",
-                      alignItems: "center",
-                      justifyContent: "space-around",
-                      fontSize: "1.5rem",
-                      cursor: "pointer",
-                      borderRadius: "8px",
-                    }}
-                  >
-                    <span>
-                      <img src={star} alt="star" height="20" />
-                    </span>
-                    <span>Bio Settings</span>
-                    <span>
-                      <img src={star} alt="star" height="20" />
-                    </span>
-                  </div>
+                <div style={{ width: "100%" }}>
+                  <div style={{ height: "25vh" }}>
+                    <div
+                      onClick={() => {
+                        setToggle("Bio");
+                      }}
+                      style={{
+                        width: "80%",
+                        textAlign: "center",
+                        padding: "20px",
+                        display: "flex",
+                        margin: "auto",
+                        alignItems: "center",
+                        justifyContent: "space-around",
+                        fontSize: "1.5rem",
+                        cursor: "pointer",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <span>
+                        <img src={star} alt="star" height="20" />
+                      </span>
+                      <span>Bio Settings</span>
+                      <span>
+                        <img src={star} alt="star" height="20" />
+                      </span>
+                    </div>
                   </div>
                   <div>
-                  <div
-                  onClick={()=>{setToggle("User")}}
-                    style={{
-                      width: "80%",
-                      textAlign: "center",
-                      padding: "20px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-around",
-                      fontSize: "1.5rem",
-                      margin:"auto",
-                      cursor: "pointer",
-                      borderRadius: "8px",
-
-                    }}
-                  >
-                    <span>
-                      <img src={star} alt="star" height="20" />
-                    </span>
-                    <span>User Settings</span>
-                    <span>
-                      <img src={star} alt="star" height="20" />
-                    </span>
-                  </div>
+                    <div
+                      onClick={() => {
+                        setToggle("User");
+                      }}
+                      style={{
+                        width: "80%",
+                        textAlign: "center",
+                        padding: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-around",
+                        fontSize: "1.5rem",
+                        margin: "auto",
+                        cursor: "pointer",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <span>
+                        <img src={star} alt="star" height="20" />
+                      </span>
+                      <span>User Settings</span>
+                      <span>
+                        <img src={star} alt="star" height="20" />
+                      </span>
+                    </div>
                   </div>
                 </div>
               </>
@@ -399,7 +648,11 @@ const SettingsScreen = () => {
               alignItems: "center",
             }}
           >
-            <span>
+            <span
+              onClick={() => {
+                _checkPassword(password, confirmpassword);
+              }}
+            >
               <img src={send} alt="send" />
             </span>
           </div>

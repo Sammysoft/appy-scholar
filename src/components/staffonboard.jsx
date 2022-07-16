@@ -7,7 +7,6 @@ import { api } from "../strings";
 import close from "../svg/close.svg";
 import Swal from "sweetalert2";
 
-
 const Button = styled.span`
   border-radius: 7px;
   padding: 2vh 10vw;
@@ -34,6 +33,7 @@ const StaffOnboardForm = () => {
   const [subject, setSubjects] = useState({ selectedSubjects: [] });
   const [togglePage, setTogglePage] = useState(false);
   const [subjects, setSubject] = useState([]);
+  const [tempSub, setTempSub] = useState("");
 
   const { selectedSubjects } = subject;
 
@@ -44,10 +44,11 @@ const StaffOnboardForm = () => {
       firstname,
       lastname,
       gender,
-      subject,
+      subjects: selectedSubjects,
       role,
       email,
       classRole,
+      phonenumber
     };
     axios
       .post(`${api}/staffs/add`, payload)
@@ -65,7 +66,7 @@ const StaffOnboardForm = () => {
 
   useEffect(() => {
     axios
-      .get(`${api}/subjects`)
+      .get(`${api}/subject`)
       .then((res) => {
         setSubject(res.data.data);
         console.log(res.data.data);
@@ -89,15 +90,6 @@ const StaffOnboardForm = () => {
       console.log("unpicked");
     }
   };
-
-
-
-
-
-
-
-
-
 
   return (
     <>
@@ -294,8 +286,10 @@ const StaffOnboardForm = () => {
                 onChange={(e) => {
                   setRole(e.target.value);
                   if (e.target.value === "Class Master") {
+                    setRole("Class Master")
                     setShowClass(true);
                   } else if (e.target.value === "Staff") {
+                    setRole("Staff")
                     setShowClass(false);
                   }
                 }}
@@ -393,9 +387,7 @@ const StaffOnboardForm = () => {
                       <div
                         onClick={() => {
                           pickCount(el.text);
-                          setSubjects({
-                            selectedSubjects: [...selectedSubjects, el.text]
-                          });
+                          setTempSub(el.text);
                         }}
                         style={{
                           fontFamily: "Irish Grover",
@@ -448,10 +440,12 @@ const StaffOnboardForm = () => {
                               width="16"
                               onClick={() => {
                                 setSubjects({
-                                  selectedSubjects : selectedSubjects.filter(function (value) {
-                                    return (value !== el);
-                                  })
-                              });
+                                  selectedSubjects: selectedSubjects.filter(
+                                    function (value) {
+                                      return value !== el;
+                                    }
+                                  ),
+                                });
                               }}
                             />
                           </span>
@@ -461,6 +455,69 @@ const StaffOnboardForm = () => {
                   })}
                 </div>
               </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "auto auto",
+                  gap: "5px",
+                }}
+              >
+                <input
+                  value={tempSub}
+                  type="text"
+                  placeholder="Subject"
+                  style={{
+                    fontFamily: "Irish Grover",
+                    border: "1px solid #150845",
+                    padding: "5px 5px",
+                    height: "7vh",
+                    borderRadius: "5px",
+                    fontSize: "1.5rem",
+                    margin: "5px 0px",
+                    color: "#150845",
+                    backgroundColor: "white",
+                  }}
+                />
+                <select
+                  style={{
+                    fontFamily: "Irish Grover",
+                    border: "1px solid #150845",
+                    padding: "5px 5px",
+                    height: "7vh",
+                    borderRadius: "5px",
+                    fontSize: "1.5rem",
+                    margin: "5px 0px",
+                    color: "#150845",
+                    backgroundColor: "white",
+                  }}
+                  onChange={(e) => setTempSub(`${tempSub} [${e.target.value}]`)}
+                >
+                  <option value="Class">Class</option>
+                  <option value="Jss One">Jss One</option>
+                  <option value="Jss Two">Jss Two</option>
+                  <option value="Jss Three">Jss Three</option>
+                  <option value="Sss One">Sss One</option>
+                  <option value="Sss Two">Sss Two</option>
+                  <option value="Sss Three">Sss Three</option>
+                </select>
+                <span
+                  onClick={() => {
+                    setSubjects({
+                      selectedSubjects: [...selectedSubjects, tempSub ],
+                    });
+                    setTempSub("")
+                  }}
+                  style={{
+                    color: "white",
+                    backgroundColor: "#150845",
+                    width: "fit-content",
+                    padding: "10px",
+                  }}
+                >
+                  Okay
+                </span>
+              </div>
+              <br />
               <div
                 onClick={() => {
                   setTogglePage(!togglePage);

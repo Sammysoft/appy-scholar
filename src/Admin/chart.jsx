@@ -1,15 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import AuthForm from "../components/authform";
 import styled from "styled-components";
+// import Chart from "react-apexcharts";
 import leftarrow from "../svg/left-arrow.svg";
-import { useEffect } from "react";
 
 const ScreenWrapper = styled.div`
   height: 100vh;
   width: 100vw;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   background-color: white;
@@ -18,46 +16,43 @@ const ScreenWrapper = styled.div`
   box-sizing: border-box;
 `;
 
-const AuthScreen = () => {
-  const navigate = useNavigate();
-
-
-  useEffect(()=>{
-    const token = localStorage.getItem("appy-token");
-    if (token) {
-      navigate("/dashboard");
-    }
-  })
-
+const Charts = () => {
+    const navigate = useNavigate()
   return (
     <>
       <ScreenWrapper>
-        <div style={{ width: "95%", height: "10vh", textAlign: "left" }}>
+        <div
+          style={{
+            width: "100%",
+            height: "5vh",
+            textAlign: "left",
+            position: "relative",
+            marginTop: "0px",
+          }}
+        >
           <span onClick={() => navigate(-1)}>
             <img src={leftarrow} alt="pointer" />
           </span>
-          <span
-            style={{ fontWeight: "900", fontSize: "3rem", marginLeft: "25vw" }}
-          >
-            Login
-          </span>
         </div>
+
         <div
           style={{
-            width: "70%",
-            height: "70vh",
+            width: "100%",
+            height: "fit-content",
             textAlign: "center",
-            display: "flex",
-            fiexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
+            position: "relative",
           }}
         >
-          <AuthForm />
+          <div>
+            <h3 style={{ fontFamily: "Irish Grover" }}>Overall Statistics</h3>
+          </div>
+
         </div>
       </ScreenWrapper>
     </>
   );
 };
 
-export default AuthScreen;
+export default Charts;

@@ -3,19 +3,18 @@ import { Loader } from "semantic-ui-react";
 import send from "../svg/send.svg";
 import calculator from "../svg/calculator.svg";
 import Swal from "sweetalert2";
-// import axios from "axios";
-// import { api } from "../strings";
+import axios from "axios";
+import { api } from "../strings";
 
-const Uploads = ({ studentname, studentID }) => {
+const Uploads = ({ studentname, studentID, subject }) => {
   const [loading, setLoading] = useState(false);
   const [changeState, setChangeState] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [firstCA, setFirstCA] = useState(null);
+  const [score, setScore] = useState();
   const [secondCA, setSecondCA] = useState(null);
   const [exam, setExam] = useState(null);
   const [total, setTotal] = useState(null);
-
-
 
   const _computeTotal = (e) => {
     e.preventDefault();
@@ -43,8 +42,16 @@ const Uploads = ({ studentname, studentID }) => {
       secondCA,
       exam,
       total,
+      studentID,
+      subject,
+      studentname,
     };
     console.log(payload);
+
+    axios.post(`${api}/subjects/addscore`, payload).then((res) => {
+      console.log(res.data.data);
+      setScore(res.data.data);
+    });
   };
 
   // useEffect(() => {
@@ -52,8 +59,6 @@ const Uploads = ({ studentname, studentID }) => {
   //     console.log(res.data);
   //   });
   // }, [studentID]);
-
-
 
   return (
     <>
@@ -220,7 +225,11 @@ const Uploads = ({ studentname, studentID }) => {
               <span>{studentname}</span>
             </div>
             <div>
-              <span>Uploaded Succesfully</span>
+              <span>
+                <small>1st</small>:{" "}{score.firsttest} <small>2nd</small>:
+                {" "}{score.secondtest} <small>Exam</small>:{" "}{score.exam}{" "}
+                <small>Total</small>:{" "}{score.tot}
+              </span>
             </div>
             <div>👍</div>
           </>

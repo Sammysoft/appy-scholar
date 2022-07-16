@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import leftarrow from "../svg/left-arrow.svg"
-
+import leftarrow from "../svg/left-arrow.svg";
+import { LoginContext } from "../loginContext";
+import NavigatorRouter from "../screens/Navigator";
 
 const ScreenWrapper = styled.div`
   height: fit-content;
@@ -19,7 +20,8 @@ const ScreenWrapper = styled.div`
 `;
 
 const Subjects = () => {
-    const navigate = useNavigate()
+  const { user } = useContext(LoginContext);
+  const navigate = useNavigate();
   return (
     <>
       <ScreenWrapper>
@@ -50,10 +52,40 @@ const Subjects = () => {
             }}
           >
             <div>
-              <h3 style={{ fontFamily: "Irish Grover" }}>
-                Your Subjects
-              </h3>
+              <h3 style={{ fontFamily: "Irish Grover" }}>Your Subjects</h3>
             </div>
+            <div
+              style={{
+                display: "grid",
+                height:"70vh",
+                gridTemplateColumns: "auto",
+                gap: "30px",
+                width: "100%",
+                padding: "5px",
+                justifyContent:"center",
+                alignItems:"center"
+              }}
+            >
+              {user.subjects.map((sub) => {
+                return (
+                  <>
+                    <div
+                      style={{
+                        backgroundColor: "#150845",
+                        color: "white",
+                        borderRadius: "6px",
+                        padding: "20px",
+                        width: "100%",
+                        fontSize:"1.5rem"
+                      }}
+                    >
+                      {sub}
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+            <NavigatorRouter />
           </div>
         </div>
       </ScreenWrapper>

@@ -1,11 +1,12 @@
-import React, { useState  } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
 import { api } from "../strings";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
 import Uploads from "./upload";
+import { LoginContext } from "../loginContext";
 
 const ScreenWrapper = styled.div`
   height: fit-content;
@@ -21,28 +22,26 @@ const ScreenWrapper = styled.div`
   position: relative;
 `;
 
-
-
-
 const Classes = () => {
-
+  const { user } = useContext(LoginContext);
   const navigate = useNavigate();
   const [classData, setClassData] = useState(null);
   const [students, setStudents] = useState([]);
   const [toggleSelect, setToggleSelect] = useState(false);
 
-
-  const _handleStudents = (value) =>{
-    axios.post(`${api}/classes/students/`, {value}).then((res) => {
-      setStudents(res.data.data);
-      console.log(res.data.data)
-    }).catch(error=>{
-      Swal.fire({
-        title: "Oops 😥",
-        text: error.response.data.data
+  const _handleStudents = (value) => {
+    axios
+      .post(`${api}/classes/students/`, { value })
+      .then((res) => {
+        setStudents(res.data.data);
       })
-    })}
-
+      .catch((error) => {
+        Swal.fire({
+          title: "Oops 😥",
+          text: error.response.data.data,
+        });
+      });
+  };
 
   return (
     <>
@@ -104,6 +103,7 @@ const Classes = () => {
                       <Uploads
                         studentID={stud._id}
                         studentname={stud.studentname}
+                        subject={classData}
                       />
                     </>
                   );
@@ -155,77 +155,29 @@ const Classes = () => {
                 paddingTop: "50px",
               }}
             >
-              <span
-                onClick={() => {
-                  setToggleSelect(!toggleSelect);
-                  setClassData("Mathematics [Jss One]");
-                  _handleStudents("Mathematics [Jss One]")
-                }}
-                style={{
-                  padding: "10px",
-                  backgroundColor: "#150845",
-                  color: "white",
-                  borderRadius: "5px",
-                }}
-              >
-                Mathematics [Jss One]
-              </span>
-              <span
-                onClick={() => {
-                  setToggleSelect(!toggleSelect);
-                  setClassData("Mathematics [Jss Two]");
-                }}
-                style={{
-                  padding: "10px",
-                  backgroundColor: "#150845",
-                  color: "white",
-                  borderRadius: "5px",
-                }}
-              >
-                Mathematics [Jss Two]
-              </span>
-              <span
-                onClick={() => {
-                  setToggleSelect(!toggleSelect);
-                  setClassData("Mathematics [Jss Three]");
-                }}
-                style={{
-                  padding: "10px",
-                  backgroundColor: "#150845",
-                  color: "white",
-                  borderRadius: "5px",
-                }}
-              >
-                Mathematics [Jss Three]
-              </span>
-              <span
-                onClick={() => {
-                  setToggleSelect(!toggleSelect);
-                  setClassData("Economics [Sss One]");
-                }}
-                style={{
-                  padding: "10px",
-                  backgroundColor: "#150845",
-                  color: "white",
-                  borderRadius: "5px",
-                }}
-              >
-                Economics [Sss One]
-              </span>
-              <span
-                onClick={() => {
-                  setToggleSelect(!toggleSelect);
-                  setClassData("Economics [Sss Two]");
-                }}
-                style={{
-                  padding: "10px",
-                  backgroundColor: "#150845",
-                  color: "white",
-                  borderRadius: "5px",
-                }}
-              >
-                Economics [Sss Two]
-              </span>
+              {user.subjects.map((sub) => {
+                return (
+                  <>
+                    <span
+                      onClick={() => {
+                        setToggleSelect(!toggleSelect);
+                        setClassData(sub);
+                        _handleStudents(sub);
+                      }}
+                      style={{
+                        padding: "10px",
+                        backgroundColor: "#150845",
+                        color: "white",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      {sub}
+                    </span>
+                  </>
+                );
+              })}
+
+
             </div>
           </>
         )}

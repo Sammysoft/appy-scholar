@@ -6,11 +6,12 @@ import ErrorScreen from "./screens/ErrorScreen";
 import FlashScreen from "./screens/flashscreen";
 import OnboardScreen from "./screens/onboardscreen";
 import SignupScreen from "./screens/SignupScreen";
-import DashboardPage from "./screens/DashboardPage";
+import DashboardScreen from "./screens/DashboardScreen";
 import OfflineScreen from "./screens/OfflineScreen";
 import NotificationScreen from "./screens/NotificationScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import QuestionUpload from "./screens/QuestionUploadPage";
+import { LoginProvider } from "./loginContext";
 
 function App() {
   const [status, setStatus] = useState(Boolean);
@@ -21,7 +22,6 @@ function App() {
     }
   }, [status]);
 
-
   switch (status) {
     case true:
       return (
@@ -30,12 +30,20 @@ function App() {
           <Route path="/onboard" exact element={<OnboardScreen />} />
           <Route path="/auth" exact element={<AuthScreen />} />
           <Route path="/register" exact element={<SignupScreen />} />
-          <Route path="/dashboard" exact element={<DashboardPage />} />
-          <Route path="/admin/*" exact element={<DashboardPage />} />
-          <Route path="/master/*" exact element={<DashboardPage />} />
-          <Route path="/staff/*" exact element={<DashboardPage />} />
-          <Route path="/account/settings" exact element={<SettingsScreen />} />
-          <Route path="/account/notification" exact element={<NotificationScreen />} />
+          <Route path="/dashboard" exact element={<DashboardScreen />} />
+          <Route path="/admin/*" exact element={<DashboardScreen />} />
+          <Route path="/master/*" exact element={<DashboardScreen />} />
+          <Route path="/staff/*" exact element={<DashboardScreen />} />
+          <Route path="/account/settings/*" exact element={<SettingsScreen />} />
+          <Route
+            path="/account/notification"
+            exact
+            element={
+              <LoginProvider>
+                <NotificationScreen />
+              </LoginProvider>
+            }
+          />
           <Route path="/upload/questions" exact element={<QuestionUpload />} />
           <Route path="*" exact element={<ErrorScreen />} />
         </Routes>

@@ -1,18 +1,23 @@
 /* eslint-disable */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import AdminDashboard from "../Admin/Dashboard";
 import ClassMasterDashboard from "../ClassMaster/Dashboard";
 import StaffDashboard from "../Staff/Dashboard";
 import { Loader } from "semantic-ui-react";
+import { LoginContext } from "../loginContext";
 
 const DashboardPage = () => {
-  const [role, setRole] = useState("");
+  const {user} = useContext(LoginContext);
+  const [valrole, setRole] = useState(user);
+
+
 
   useEffect(() => {
-    setRole("Class Master");
-  }, []);
+    setRole(user.role);
 
-  switch (role) {
+  }, [user]);
+
+  switch (valrole) {
     case "Admin":
       return (
         <>
@@ -49,8 +54,10 @@ const DashboardPage = () => {
             }}
           >
             <Loader active inline="centered" />
-            <br/>
-            <span style={{fontWeight: "50", opacity: "0.4"}}>Fetching Resource...</span>
+            <br />
+            <span style={{ fontWeight: "50", opacity: "0.4" }}>
+              Fetching Resource...
+            </span>
           </div>
         </>
       );

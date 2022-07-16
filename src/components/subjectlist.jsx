@@ -26,7 +26,7 @@ const SubjectList = () => {
       subject,
     };
     axios
-      .post(`${api}/subjects/add`, payload)
+      .post(`${api}/subject/add`, payload)
       .then((res) => {
         console.log(res);
         setLoading(false)
@@ -37,17 +37,18 @@ const SubjectList = () => {
         })
       })
       .catch((err) => {
+        setLoading(false)
         console.log(err.response);
         Swal.fire({
           title: "Oops",
-          text: err.response.data.msg,
+          text: err.response.data.data,
         });
       });
   };
 
   useEffect(() => {
     setLoading(true)
-    axios.get(`${api}/subjects`).then((res) => {
+    axios.get(`${api}/subject`).then((res) => {
       setSubjects(res.data.data);
     });
     setLoading(false)
@@ -132,6 +133,7 @@ const SubjectList = () => {
           display: "flex",
           justifyContent: "space-between",
           marginTop: "10px",
+          width: "100%"
         }}
       >
         <textarea
@@ -139,6 +141,7 @@ const SubjectList = () => {
             border: "1px solid #150845",
             padding: "5px 5px",
             height: "5vh",
+            width:"100%",
             borderRadius: "5px",
             fontFamily: "Irish Grover",
           }}
@@ -148,7 +151,7 @@ const SubjectList = () => {
           }}
           placeholder="Add Subject"
         ></textarea>
-        <select
+        {/* <select
           style={{
             padding: "5px 5px",
             width: "40%",
@@ -168,7 +171,7 @@ const SubjectList = () => {
           <option value="Sss One">Sss One</option>
           <option value="Sss Two">Sss Two</option>
           <option value="Sss Three">Sss Three</option>
-        </select>
+        </select> */}
       </div>
       <br />
       <Button

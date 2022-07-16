@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -15,6 +15,7 @@ import AddStudent from "./addstudent";
 import Comments from "./comments";
 import Upload from "../components/uploads";
 import NavigatorRouter from "../screens/Navigator";
+import { LoginContext } from "../loginContext";
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -29,6 +30,7 @@ const ScreenWrapper = styled.div`
 `;
 
 const ClassMasterDashboard = () => {
+  const {user} = useContext(LoginContext);
   const location = useLocation();
   const thisRoute = location.pathname;
   const [screen, setScreen] = useState(`${thisRoute}`);
@@ -121,7 +123,7 @@ const ClassMasterDashboard = () => {
                   border: "1px solid black",
                   position: "absolute",
                   bottom: "-5vh",
-                  backgroundImage: `url(/images/profile.jpg)`,
+                  backgroundImage: `url(${user.profilepicture})`,
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "contain",
                   backgroundSize: "cover",
@@ -144,7 +146,7 @@ const ClassMasterDashboard = () => {
             >
               <div>
                 <h3 style={{ fontFamily: "Irish Grover" }}>
-                  Welcome, Mr Charles{" "}
+                  Welcome, {user.profilepicture}{" "}
                 </h3>
               </div>
 

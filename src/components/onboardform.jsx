@@ -63,7 +63,8 @@ const OnboardForm = () => {
   const [toggleElectives, setToggleElectives] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [pickFile, setPickFile] = useState(null);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("");
 
   let coreSubjects = [];
   coreSubjects.push(subjectCategory);
@@ -72,7 +73,7 @@ const OnboardForm = () => {
 
   const _signUp = (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
 
     const payload = {
       firstname,
@@ -101,14 +102,14 @@ const OnboardForm = () => {
           })
           .then((res) => {
             navigate("/master/students");
-            setLoading(false)
+            setLoading(false);
             Swal.fire({
               title: "Fully registered  👍",
               text: res.data.data,
             });
           })
           .catch((error) => {
-            setLoading(false)
+            setLoading(false);
             Swal.fire({
               title: "Oops 😥",
               text: error.response.data.data,
@@ -116,7 +117,7 @@ const OnboardForm = () => {
           });
       })
       .catch((error) => {
-        setLoading(false)
+        setLoading(false);
         Swal.fire({
           title: "Oops 😥",
           text: error.response.data.data,
@@ -136,13 +137,16 @@ const OnboardForm = () => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
+          console.log("Upload is " + Math.round(progress) + "% done");
+          setUploadStatus(`Uploading ${Math.round(progress)}% done`);
           switch (snapshot.state) {
             case "paused":
               console.log("Upload is paused");
+              setUploadStatus("Upload Paused");
               break;
             case "running":
               console.log("Upload is running");
+              // setUploadStatus("Uploading...");
               break;
           }
         },
@@ -155,8 +159,6 @@ const OnboardForm = () => {
             Swal.fire({
               text: "Successfully uploaded image to the cloud!",
               title: "Image uploaded 👍",
-              timmer: 1500,
-              position: "top-right",
             });
             setPicture(downloadURL);
             setProfilePicture(downloadURL);
@@ -178,545 +180,309 @@ const OnboardForm = () => {
   };
 
   return (
-
-
-
     <>
-    {loading === true ? <>
-      <div
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "left",
-                justifyContent: "space-around",
-                height: "90vh",
-              }}
-            >
-                <div>
-                <Loader active inline="centered" />
-                <span>Please Wait...</span>
-                </div>
-
-            </div>
-    </>:<>
-    {toggleElectives === true ? (
+      {loading === true ? (
         <>
           <div
             style={{
-              position: "absolute",
-              bottom: "-20px",
               width: "100%",
-              left: "0px",
-              backgroundColor: "#dbb921",
-              borderTopRight: "8px",
-              borderTopLeft: "8px",
-              height: "30vh",
-              borderTopLeftRadius: "30px",
-              borderTopRightRadius: "30px",
-              display: "grid",
-              gridTemplateColumns: "auto auto",
-              padding: "15px",
-              gap: "10px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "left",
+              justifyContent: "space-around",
+              height: "90vh",
             }}
           >
-            <span>{category}</span>
-            <span>Electives</span>
-            {subjectElectives.map((electives) => {
-              return (
-                <>
-                  <div
-                    onClick={() => {
-                      setSubjects({
-                        selectedSubjects: [...selectedSubjects, electives],
-                      });
-                    }}
-                    style={{
-                      backgroundColor: "#150845",
-                      color: "white",
-                      padding: "5px 10px",
-                      height: "fit-content",
-                    }}
-                  >
-                    {electives}
-                  </div>
-                </>
-              );
-            })}
+            <div>
+              <Loader active inline="centered" />
+              <span>Please Wait...</span>
+            </div>
           </div>
         </>
       ) : (
-        <></>
-      )}
-      <div>
-        {selectableDrawer === true ? (
-          <>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "left",
-                justifyContent: "space-around",
-                height: "90vh",
-              }}
-            >
-              <span>
-                <img src={star} alt="star" height="14" width="14" />
-                <img src={star} alt="star" height="14" width="14" />
-                <img src={star} alt="star" height="14" width="14" />
-              </span>
-              <span
+        <>
+          {toggleElectives === true ? (
+            <>
+              <div
                 style={{
-                  fontWeight: "800",
-                  fontSize: "1rem",
-                  color: "#150845",
+                  position: "absolute",
+                  bottom: "-20px",
+                  width: "100%",
+                  left: "0px",
+                  backgroundColor: "#dbb921",
+                  borderTopRight: "8px",
+                  borderTopLeft: "8px",
+                  height: "30vh",
+                  borderTopLeftRadius: "30px",
+                  borderTopRightRadius: "30px",
+                  display: "grid",
+                  gridTemplateColumns: "auto auto",
+                  padding: "15px",
+                  gap: "10px",
                 }}
               >
-                Core {category} Subjects
-              </span>
-              <div style={{ height: "80vh", overflowY: "scroll" }}>
-                {selectedSubjects.map((subject) => {
+                <span>{category}</span>
+                <span>Electives</span>
+                {subjectElectives.map((electives) => {
                   return (
                     <>
                       <div
+                        onClick={() => {
+                          setSubjects({
+                            selectedSubjects: [...selectedSubjects, electives],
+                          });
+                        }}
                         style={{
                           backgroundColor: "#150845",
                           color: "white",
                           padding: "5px 10px",
-                          margin: "5px",
-                          borderRadius: "6px",
+                          height: "fit-content",
                         }}
                       >
-                        {subject}
+                        {electives}
                       </div>
                     </>
                   );
                 })}
               </div>
-              <span
-                onClick={() => {
-                  setSelectableDrawer(false);
-                }}
-                style={{
-                  backgroundColor: "#150845",
-                  color: "white",
-                  padding: "10px 15px",
-                  fontWeight: "600",
-                  fontSize: "1rem",
-                  marginBottom: "10vh",
-                }}
-              >
-                Go Back
-              </span>
-              <div
-                onClick={() => {
-                  setToggleElectives(!toggleElectives);
-                }}
-                style={{
-                  position: "absolute",
-                  padding: "5px 10px",
-                  bottom: "5px",
-                  right: "0px",
-                  color: "white",
-                  backgroundColor: "#150845",
-                  borderTopLeftRadius: "5px",
-                  borderBottomLeftRadius: "5px",
-                }}
-              >
-                {category} Electives
-              </div>
-            </div>
-          </>
-        ) : (
-          <>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "left",
-                justifyContent: "space-around",
-              }}
-            >
-              <span
-                style={{
-                  fontWeight: "800",
-                  fontSize: "1.5rem",
-                  color: "#150845",
-                }}
-              >
-                Bio Data Form
-              </span>
-              <div
-                style={{
-                  width: "65%",
-                  height: "25vh",
-                  position: "relative",
-                  borderRadius: "50%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  margin: "auto",
-                }}
-              >
-                {imageLoad === true ? (
-                  <>
-                    <Loader active inline="centered" />
-                  </>
-                ) : (
-                  <>
-                    <img
-                      src={picture}
-                      alt="profile"
-                      height="100%"
-                      width="100%"
-                      style={{
-                        borderRadius: "50%",
-                        border: "4px solid #150845",
-                        padding: "0px",
-                      }}
-                    />
-
-                    {picture === "/images/profile.jpg" ? (
+            </>
+          ) : (
+            <></>
+          )}
+          <div>
+            {selectableDrawer === true ? (
+              <>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "left",
+                    justifyContent: "space-around",
+                    height: "90vh",
+                  }}
+                >
+                  <span>
+                    <img src={star} alt="star" height="14" width="14" />
+                    <img src={star} alt="star" height="14" width="14" />
+                    <img src={star} alt="star" height="14" width="14" />
+                  </span>
+                  <span
+                    style={{
+                      fontWeight: "800",
+                      fontSize: "1rem",
+                      color: "#150845",
+                    }}
+                  >
+                    Core {category} Subjects
+                  </span>
+                  <div style={{ height: "80vh", overflowY: "scroll" }}>
+                    {selectedSubjects.map((subject) => {
+                      return (
+                        <>
+                          <div
+                            style={{
+                              backgroundColor: "#150845",
+                              color: "white",
+                              padding: "5px 10px",
+                              margin: "5px",
+                              borderRadius: "6px",
+                            }}
+                          >
+                            {subject}
+                          </div>
+                        </>
+                      );
+                    })}
+                  </div>
+                  <span
+                    onClick={() => {
+                      setSelectableDrawer(false);
+                    }}
+                    style={{
+                      backgroundColor: "#150845",
+                      color: "white",
+                      padding: "10px 15px",
+                      fontWeight: "600",
+                      fontSize: "1rem",
+                      marginBottom: "10vh",
+                    }}
+                  >
+                    Go Back
+                  </span>
+                  <div
+                    onClick={() => {
+                      setToggleElectives(!toggleElectives);
+                    }}
+                    style={{
+                      position: "absolute",
+                      padding: "5px 10px",
+                      bottom: "5px",
+                      right: "0px",
+                      color: "white",
+                      backgroundColor: "#150845",
+                      borderTopLeftRadius: "5px",
+                      borderBottomLeftRadius: "5px",
+                    }}
+                  >
+                    {category} Electives
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "left",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontWeight: "800",
+                      fontSize: "1.5rem",
+                      color: "#150845",
+                    }}
+                  >
+                    Bio Data Form
+                  </span>
+                  <div
+                    style={{
+                      width: "65%",
+                      height: "25vh",
+                      position: "relative",
+                      borderRadius: "50%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      margin: "auto",
+                    }}
+                  >
+                    {imageLoad === true ? (
                       <>
-                        <span
-                          onClick={() => {
-                            pick.current.click();
-                          }}
-                          style={{
-                            position: "absolute",
-                            backgroundColor: "#150845",
-                            padding: "5px 10px",
-                            color: "white",
-                            fontFamily: "Irish Grover",
-                            borderRadius: "7px",
-                            bottom: "10px",
-                            right: "-5px",
-                          }}
-                        >
-                          Add Picture
-                        </span>
+                        <div>
+                          <Loader active inline="centered" />
+                          <span style={{ opacity: 0.3 }}>{uploadStatus}</span>
+                        </div>
                       </>
                     ) : (
                       <>
-                        <span
-                          onClick={() => {
-                            uploadFile();
-                          }}
+                        <img
+                          src={picture}
+                          alt="profile"
+                          height="100%"
+                          width="100%"
                           style={{
-                            position: "absolute",
-                            backgroundColor: "#150845",
-                            padding: "5px 10px",
-                            color: "white",
-                            fontFamily: "Irish Grover",
-                            borderRadius: "7px",
-                            bottom: "10px",
-                            right: "-5px",
+                            borderRadius: "50%",
+                            border: "4px solid #150845",
+                            padding: "0px",
                           }}
-                        >
-                          Upload
-                        </span>
-                        <span
-                          onClick={() => {
-                            pick.current.click();
-                          }}
-                          style={{
-                            position: "absolute",
-                            backgroundColor: "#150845",
-                            padding: "5px 10px",
-                            color: "white",
-                            fontFamily: "Irish Grover",
-                            borderRadius: "7px",
-                            bottom: "10px",
-                            left: "-5px",
-                          }}
-                        >
-                          Change
-                        </span>
+                        />
+
+                        {picture === "/images/profile.jpg" ? (
+                          <>
+                            <span
+                              onClick={() => {
+                                pick.current.click();
+                              }}
+                              style={{
+                                position: "absolute",
+                                backgroundColor: "#150845",
+                                padding: "5px 10px",
+                                color: "white",
+                                fontFamily: "Irish Grover",
+                                borderRadius: "7px",
+                                bottom: "10px",
+                                right: "-5px",
+                              }}
+                            >
+                              Add Picture
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span
+                              onClick={() => {
+                                uploadFile();
+                              }}
+                              style={{
+                                position: "absolute",
+                                backgroundColor: "#150845",
+                                padding: "5px 10px",
+                                color: "white",
+                                fontFamily: "Irish Grover",
+                                borderRadius: "7px",
+                                bottom: "10px",
+                                right: "-5px",
+                              }}
+                            >
+                              Upload
+                            </span>
+                            <span
+                              onClick={() => {
+                                pick.current.click();
+                              }}
+                              style={{
+                                position: "absolute",
+                                backgroundColor: "#150845",
+                                padding: "5px 10px",
+                                color: "white",
+                                fontFamily: "Irish Grover",
+                                borderRadius: "7px",
+                                bottom: "10px",
+                                left: "-5px",
+                              }}
+                            >
+                              Change
+                            </span>
+                          </>
+                        )}
                       </>
                     )}
-                  </>
-                )}
-                <input
-                  onChange={(e) => {
-                    handlePictureChange(e);
-                    setPickFile(e.target.files[0]);
-                  }}
-                  ref={pick}
-                  style={{ display: "none" }}
-                  type="file"
-                  accept="image/*"
-                />
-              </div>
-              <label
-                style={{
-                  display: "none",
-                  fontFamily: "Irish Grover",
-                  textAlign: "left",
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "#150845",
-                  paddingTop: "10px",
-                }}
-              >
-                Image Url
-              </label>
-              <input
-                style={{
-                  display: "none",
-                  fontFamily: "Irish Grover",
-                  border: "1px solid #150845",
-                  padding: "5px 5px",
-                  width: "100%",
-                  height: "7vh",
-                  fontSize: "1.5rem",
-                  borderRadius: "5px",
-                  margin: "5px 0px",
-                  color: "#150845",
-                }}
-                type="text"
-                placeholder="Image URL"
-                value={profilePicture}
-              />
-              <label
-                style={{
-                  fontFamily: "Irish Grover",
-                  textAlign: "left",
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "#150845",
-                  paddingTop: "10px",
-                }}
-              >
-                First Name
-              </label>
-              <input
-                value={firstname}
-                onChange={(e) => {
-                  setFirstName(e.target.value);
-                }}
-                type="text"
-                placeholder="Student name"
-                style={{
-                  fontFamily: "Irish Grover",
-                  border: "1px solid #150845",
-                  padding: "5px 5px",
-                  width: "100%",
-                  height: "7vh",
-                  fontSize: "1.5rem",
-                  borderRadius: "5px",
-                  margin: "5px 0px",
-                  color: "#150845",
-                }}
-              />
-              <label
-                style={{
-                  fontFamily: "Irish Grover",
-                  textAlign: "left",
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "#150845",
-                  paddingTop: "10px",
-                }}
-              >
-                Last Name
-              </label>
-              <input
-                value={lastname}
-                onChange={(e) => {
-                  setLastName(e.target.value);
-                }}
-                type="text"
-                placeholder="Surname"
-                style={{
-                  fontFamily: "Irish Grover",
-                  border: "1px solid #150845",
-                  padding: "5px 5px",
-                  width: "100%",
-                  height: "7vh",
-                  borderRadius: "5px",
-                  margin: "5px 0px",
-                  fontSize: "1.5rem",
-                  color: "#150845",
-                }}
-              />
-              <label
-                style={{
-                  fontFamily: "Irish Grover",
-                  textAlign: "left",
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "#150845",
-                  paddingTop: "10px",
-                }}
-              >
-                Email
-              </label>
-              <input
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                type="email"
-                placeholder="name@gmail.com"
-                style={{
-                  fontFamily: "Irish Grover",
-                  border: "1px solid #150845",
-                  padding: "5px 5px",
-                  width: "100%",
-                  height: "7vh",
-                  borderRadius: "5px",
-                  margin: "5px 0px",
-                  fontSize: "1.5rem",
-                  color: "#150845",
-                }}
-              />
-              <label
-                style={{
-                  fontFamily: "Irish Grover",
-                  textAlign: "left",
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "#150845",
-                  paddingTop: "10px",
-                }}
-              >
-                Date Of Birth
-              </label>
-              <style>
-                {`.date-picker input {
-               width: 100%;
-               padding: 15px;
-               border: 1px solid #150845;
-               border-radius: 5px;
-               font-family: Irish Grover;
-               font-size: 1.5rem;
-               color: #150845;
-                 }`}
-              </style>
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                wrapperClassName="date-picker"
-              />
-              <label
-                style={{
-                  fontFamily: "Irish Grover",
-                  textAlign: "left",
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "#150845",
-                  paddingTop: "10px",
-                }}
-              >
-                Phone Number
-              </label>
-              <input
-                value={phonenumber}
-                onChange={(e) => {
-                  setPhoneNumber(e.target.value);
-                }}
-                type="text"
-                placeholder="[+234] 901 234 5670"
-                style={{
-                  fontFamily: "Irish Grover",
-                  border: "1px solid #150845",
-                  padding: "5px 5px",
-                  width: "100%",
-                  height: "7vh",
-                  borderRadius: "5px",
-                  fontSize: "1.5rem",
-                  margin: "5px 0px",
-                  color: "#150845",
-                }}
-              />
-              <label
-                style={{
-                  fontFamily: "Irish Grover",
-                  textAlign: "left",
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "#150845",
-                  paddingTop: "10px",
-                }}
-              >
-                Gender
-              </label>
-              <select
-                placeholder="Gender"
-                onChange={(e) => {
-                  setGender(e.target.value);
-                }}
-                style={{
-                  fontFamily: "Irish Grover",
-                  border: "1px solid #150845",
-                  padding: "5px 5px",
-                  width: "100%",
-                  height: "7vh",
-                  borderRadius: "5px",
-                  fontSize: "1.5rem",
-                  margin: "5px 0px",
-                  color: "#150845",
-                  backgroundColor: "white",
-                }}
-              >
-                <option value="Gender">Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-              <label
-                style={{
-                  fontFamily: "Irish Grover",
-                  textAlign: "left",
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "#150845",
-                  paddingTop: "10px",
-                }}
-              >
-                Class
-              </label>
-              <select
-                placeholder="Class"
-                onChange={(e) => {
-                  setStudentClass(e.target.value);
-                  if (
-                    e.target.value === "Jss One" ||
-                    e.target.value === "Jss Two" ||
-                    e.target.value === "Jss Three"
-                  ) {
-                    setShowSubject(false);
-                    setSubjectCategory(Junior);
-                    setSubjects({ selectedSubjects: Junior });
-                    console.log(subjects);
-                  } else {
-                    setShowSubject(true);
-                  }
-                }}
-                style={{
-                  fontFamily: "Irish Grover",
-                  border: "1px solid #150845",
-                  padding: "5px 5px",
-                  width: "100%",
-                  height: "7vh",
-                  borderRadius: "5px",
-                  fontSize: "1.5rem",
-                  margin: "5px 0px",
-                  color: "#150845",
-                  backgroundColor: "white",
-                }}
-              >
-                <option value="Class">Class</option>
-                <option value="Jss One">Jss One</option>
-                <option value="Jss Two">Jss Two</option>
-                <option value="Jss Three">Jss Three</option>
-                <option value="Sss One">Sss One</option>
-                <option value="Sss Two">Sss Two</option>
-                <option value="Sss Three">Sss Three</option>
-              </select>
-              {showSubject === true ? (
-                <>
+                    <input
+                      onChange={(e) => {
+                        handlePictureChange(e);
+                        setPickFile(e.target.files[0]);
+                      }}
+                      ref={pick}
+                      style={{ display: "none" }}
+                      type="file"
+                      accept="image/*"
+                    />
+                  </div>
+                  <label
+                    style={{
+                      display: "none",
+                      fontFamily: "Irish Grover",
+                      textAlign: "left",
+                      fontSize: "1.5rem",
+                      fontWeight: "700",
+                      color: "#150845",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    Image Url
+                  </label>
+                  <input
+                    style={{
+                      display: "none",
+                      fontFamily: "Irish Grover",
+                      border: "1px solid #150845",
+                      padding: "5px 5px",
+                      width: "100%",
+                      height: "7vh",
+                      fontSize: "1.5rem",
+                      borderRadius: "5px",
+                      margin: "5px 0px",
+                      color: "#150845",
+                    }}
+                    type="text"
+                    placeholder="Image URL"
+                    value={profilePicture}
+                  />
                   <label
                     style={{
                       fontFamily: "Irish Grover",
@@ -727,27 +493,209 @@ const OnboardForm = () => {
                       paddingTop: "10px",
                     }}
                   >
-                    Specialization
+                    First Name
+                  </label>
+                  <input
+                    value={firstname}
+                    onChange={(e) => {
+                      setFirstName(e.target.value);
+                    }}
+                    type="text"
+                    placeholder="Student name"
+                    style={{
+                      fontFamily: "Irish Grover",
+                      border: "1px solid #150845",
+                      padding: "5px 5px",
+                      width: "100%",
+                      height: "7vh",
+                      fontSize: "1.5rem",
+                      borderRadius: "5px",
+                      margin: "5px 0px",
+                      color: "#150845",
+                    }}
+                  />
+                  <label
+                    style={{
+                      fontFamily: "Irish Grover",
+                      textAlign: "left",
+                      fontSize: "1.5rem",
+                      fontWeight: "700",
+                      color: "#150845",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    Last Name
+                  </label>
+                  <input
+                    value={lastname}
+                    onChange={(e) => {
+                      setLastName(e.target.value);
+                    }}
+                    type="text"
+                    placeholder="Surname"
+                    style={{
+                      fontFamily: "Irish Grover",
+                      border: "1px solid #150845",
+                      padding: "5px 5px",
+                      width: "100%",
+                      height: "7vh",
+                      borderRadius: "5px",
+                      margin: "5px 0px",
+                      fontSize: "1.5rem",
+                      color: "#150845",
+                    }}
+                  />
+                  <label
+                    style={{
+                      fontFamily: "Irish Grover",
+                      textAlign: "left",
+                      fontSize: "1.5rem",
+                      fontWeight: "700",
+                      color: "#150845",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    Email
+                  </label>
+                  <input
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
+                    type="email"
+                    placeholder="name@gmail.com"
+                    style={{
+                      fontFamily: "Irish Grover",
+                      border: "1px solid #150845",
+                      padding: "5px 5px",
+                      width: "100%",
+                      height: "7vh",
+                      borderRadius: "5px",
+                      margin: "5px 0px",
+                      fontSize: "1.5rem",
+                      color: "#150845",
+                    }}
+                  />
+                  <label
+                    style={{
+                      fontFamily: "Irish Grover",
+                      textAlign: "left",
+                      fontSize: "1.5rem",
+                      fontWeight: "700",
+                      color: "#150845",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    Date Of Birth
+                  </label>
+                  <style>
+                    {`.date-picker input {
+                        width: 100%;
+                        padding: 15px;
+                        border: 1px solid #150845;
+                        border-radius: 5px;
+                        font-family: Irish Grover;
+                        font-size: 1.5rem;
+                        color: #150845;
+                 }`}
+                  </style>
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    wrapperClassName="date-picker"
+                  />
+                  <label
+                    style={{
+                      fontFamily: "Irish Grover",
+                      textAlign: "left",
+                      fontSize: "1.5rem",
+                      fontWeight: "700",
+                      color: "#150845",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    Phone Number
+                  </label>
+                  <input
+                    value={phonenumber}
+                    onChange={(e) => {
+                      setPhoneNumber(e.target.value);
+                    }}
+                    type="text"
+                    placeholder="[+234] 901 234 5670"
+                    style={{
+                      fontFamily: "Irish Grover",
+                      border: "1px solid #150845",
+                      padding: "5px 5px",
+                      width: "100%",
+                      height: "7vh",
+                      borderRadius: "5px",
+                      fontSize: "1.5rem",
+                      margin: "5px 0px",
+                      color: "#150845",
+                    }}
+                  />
+                  <label
+                    style={{
+                      fontFamily: "Irish Grover",
+                      textAlign: "left",
+                      fontSize: "1.5rem",
+                      fontWeight: "700",
+                      color: "#150845",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    Gender
                   </label>
                   <select
-                    onClick={(e) => {
-                      if (e.target.value === "Arts") {
-                        setSubjectCategory(Arts);
-                        setSubjectElectives(ArtsElect);
-                        setCategory("Arts");
-                        setSubjects({ selectedSubjects: Arts });
-                      } else if (e.target.value === "Science") {
-                        setSubjectCategory(Science);
-                        setSubjectElectives(ScienceElect);
-                        setCategory("Science");
-                        setSubjects({ selectedSubjects: Science });
-                      } else if (e.target.value === "Commerce") {
-                        setSubjectCategory(Commerce);
-                        setSubjectElectives(CommerceElect);
-                        setCategory("Commerce");
-                        setSubjects({ selectedSubjects: Commerce });
+                    placeholder="Gender"
+                    onChange={(e) => {
+                      setGender(e.target.value);
+                    }}
+                    style={{
+                      fontFamily: "Irish Grover",
+                      border: "1px solid #150845",
+                      padding: "5px 5px",
+                      width: "100%",
+                      height: "7vh",
+                      borderRadius: "5px",
+                      fontSize: "1.5rem",
+                      margin: "5px 0px",
+                      color: "#150845",
+                      backgroundColor: "white",
+                    }}
+                  >
+                    <option value="Gender">Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                  <label
+                    style={{
+                      fontFamily: "Irish Grover",
+                      textAlign: "left",
+                      fontSize: "1.5rem",
+                      fontWeight: "700",
+                      color: "#150845",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    Class
+                  </label>
+                  <select
+                    placeholder="Class"
+                    onChange={(e) => {
+                      setStudentClass(e.target.value);
+                      if (
+                        e.target.value === "Jss One" ||
+                        e.target.value === "Jss Two" ||
+                        e.target.value === "Jss Three"
+                      ) {
+                        setSubjects({ selectedSubjects: Junior });
+                        setShowSubject(false);
+                        setSubjectCategory(Junior);
+                        console.log(subjects);
                       } else {
-                        return null;
+                        setShowSubject(true);
                       }
                     }}
                     style={{
@@ -763,41 +711,97 @@ const OnboardForm = () => {
                       backgroundColor: "white",
                     }}
                   >
-                    <option value="Arts">Arts</option>
-                    <option value="Science">Science</option>
-                    <option value="Commerce">Commerce</option>
+                    <option value="Class">Class</option>
+                    <option value="Jss One">Jss One</option>
+                    <option value="Jss Two">Jss Two</option>
+                    <option value="Jss Three">Jss Three</option>
+                    <option value="Sss One">Sss One</option>
+                    <option value="Sss Two">Sss Two</option>
+                    <option value="Sss Three">Sss Three</option>
                   </select>
-                  <span
-                    onClick={() => {
-                      setSelectableDrawer(true);
-                    }}
-                    style={{
-                      padding: "10px  10px",
-                      fontSize: "1.5rem",
-                      color: "white",
-                      backgroundColor: "#150845",
+                  {showSubject === true ? (
+                    <>
+                      <label
+                        style={{
+                          fontFamily: "Irish Grover",
+                          textAlign: "left",
+                          fontSize: "1.5rem",
+                          fontWeight: "700",
+                          color: "#150845",
+                          paddingTop: "10px",
+                        }}
+                      >
+                        Specialization
+                      </label>
+                      <select
+                        onClick={(e) => {
+                          if (e.target.value === "Arts") {
+                            setSubjectCategory(Arts);
+                            setSubjects({ selectedSubjects: Arts });
+                            setSubjectElectives(ArtsElect);
+                            setCategory("Arts");
+                          } else if (e.target.value === "Science") {
+                            setSubjectCategory(Science);
+                            setSubjects({ selectedSubjects: Science });
+                            setSubjectElectives(ScienceElect);
+                            setCategory("Science");
+                          } else if (e.target.value === "Commerce") {
+                            setSubjectCategory(Commerce);
+                            setSubjects({ selectedSubjects: Commerce });
+                            setSubjectElectives(CommerceElect);
+                            setCategory("Commerce");
+                          } else {
+                            return null;
+                          }
+                        }}
+                        style={{
+                          fontFamily: "Irish Grover",
+                          border: "1px solid #150845",
+                          padding: "5px 5px",
+                          width: "100%",
+                          height: "7vh",
+                          borderRadius: "5px",
+                          fontSize: "1.5rem",
+                          margin: "5px 0px",
+                          color: "#150845",
+                          backgroundColor: "white",
+                        }}
+                      >
+                        <option value="Arts">Arts</option>
+                        <option value="Science">Science</option>
+                        <option value="Commerce">Commerce</option>
+                      </select>
+                      <span
+                        onClick={() => {
+                          setSelectableDrawer(true);
+                        }}
+                        style={{
+                          padding: "10px  10px",
+                          fontSize: "1.5rem",
+                          color: "white",
+                          backgroundColor: "#150845",
+                        }}
+                      >
+                        Pick Subjects
+                      </span>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  <br />
+                  <Button
+                    onClick={(e) => {
+                      _signUp(e);
                     }}
                   >
-                    Pick Subjects
-                  </span>
-                </>
-              ) : (
-                <></>
-              )}
-              <br />
-              <Button
-                onClick={(e) => {
-                  _signUp(e);
-                }}
-              >
-                Done
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
-    </>}
-
+                    Done
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 };

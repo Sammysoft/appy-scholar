@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import spark from "../svg/spark.svg"
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -52,7 +51,7 @@ const FlashScreen = () => {
         <TextWrapper>
           <p>Welcome</p>
           <p>To</p>
-          <p>Oladele Dossier<img src={spark} alt="spark"/></p>
+          <p>Oladele Dossier</p>
           <br />
           <br />
           <Link

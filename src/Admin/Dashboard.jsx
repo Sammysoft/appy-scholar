@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import Student from "./student";
@@ -21,6 +21,8 @@ import StaffList from "../components/stafflist";
 import Subjects from "./subjects";
 import NavigatorRouter from "../screens/Navigator";
 import UploadedQuestions from "./questions";
+import Charts from "./chart";
+import { LoginContext } from "../loginContext";
 
 const ScreenWrapper = styled.div`
   min-height: 110vh;
@@ -35,6 +37,7 @@ const ScreenWrapper = styled.div`
 `;
 
 const AdminDashboard = () => {
+  const {user} = useContext(LoginContext);
   const location = useLocation();
   const thisRoute = location.pathname;
   const [screen, setScreen] = useState(`${thisRoute}`);
@@ -44,6 +47,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     setScreen(thisRoute);
+
     if (thisRoute === "/dashboard") {
       Swal.fire({
         icon: "",
@@ -145,7 +149,7 @@ const AdminDashboard = () => {
                   border: "1px solid black",
                   position: "absolute",
                   bottom: "-5vh",
-                  backgroundImage: `url(/images/profile.jpg)`,
+                  backgroundImage: `url(${user.profilepicture})`,
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "contain",
                   backgroundSize: "cover",
@@ -168,7 +172,7 @@ const AdminDashboard = () => {
             >
               <div>
                 <h3 style={{ fontFamily: "Irish Grover" }}>
-                  Welcome, Mr Samuel{" "}
+                  Welcome, {user.username}{" "}
                 </h3>
               </div>
 
@@ -328,18 +332,35 @@ const AdminDashboard = () => {
                       <span>Term Config</span>
                     </div>
                   </Link>
-                  <div
+                  <Link
+                    onClick={() => {
+                      setScreen("/admin/statistics");
+                    }}
+                    to="/admin/statistics"
                     style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      borderRadius: "5px",
-                      boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
+                      textDecoration: "none",
+                      textDecorationLine: "none",
+                      color: "black",
                     }}
                   >
-                    <img src={stats} alt="stats" height="100px" width="100%" />
-                    <span>Overall Statistics</span>
-                  </div>
+                  <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        borderRadius: "5px",
+                        boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
+                      }}
+                    >
+                      <img
+                        src={stats}
+                        alt="stats"
+                        height="100px"
+                        width="100%"
+                      />
+                      <span>Overall Statistics</span>
+                    </div>
+                  </Link>
                   <Link
                     onClick={() => {
                       setScreen("/admin/download/questions");
@@ -459,6 +480,13 @@ const AdminDashboard = () => {
       return (
         <>
           <UploadedQuestions />
+        </>
+      );
+      break;
+    case "/admin/statistics":
+      return (
+        <>
+          <Charts />
         </>
       );
       break;

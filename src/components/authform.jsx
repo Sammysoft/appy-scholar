@@ -1,9 +1,10 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form } from "semantic-ui-react";
+import Swal from "sweetalert2";
 import styled from "styled-components";
-
-
+import { api } from "../strings";
 
 const Button = styled.span`
   border-radius: 7px;
@@ -17,10 +18,8 @@ const Button = styled.span`
   text-align: center;
 `;
 
-
 const AuthForm = () => {
-  const navigate = useNavigate()
-  const [schoolname, setSchoolName] = useState("");
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
@@ -29,14 +28,23 @@ const AuthForm = () => {
   const _login = (e) => {
     e.preventDefault();
     const payload = {
-      schoolname,
       password,
       email,
     };
 
     console.log(payload);
-
-    navigate("/dashboard")
+    axios
+      .post(`${api}/auth`, payload)
+      .then((res) => {
+        localStorage.setItem("appy-token", res.data.token);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Oops 😥",
+          text: error.response.data.data,
+        });
+      });
   };
   return (
     <>
@@ -44,21 +52,11 @@ const AuthForm = () => {
         style={{
           textAlign: "left",
           fontSize: "1.5rem",
-
         }}
       >
         <Form.Group widths={2}>
           <Form.Input
-          style={{  fontFamily: "Irish Grover"}}
-            label="School Name"
-            placeholder="School Name"
-            value={schoolname}
-            onChange={(e) => {
-              setSchoolName(e.target.value);
-            }}
-          />
-          <Form.Input
-           style={{  fontFamily: "Irish Grover"}}
+            style={{ fontFamily: "Irish Grover" }}
             label="Email"
             placeholder="Email"
             value={email}
@@ -67,7 +65,7 @@ const AuthForm = () => {
             }}
           />
           <Form.Input
-           style={{  fontFamily: "Irish Grover"}}
+            style={{ fontFamily: "Irish Grover" }}
             label="Password"
             placeholder="Password"
             type="password"
@@ -87,7 +85,6 @@ const AuthForm = () => {
         >
           Login
         </Button>
-
       </Form>
     </>
   );

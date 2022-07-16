@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import bell from "../svg/bell.svg";
 import signout from "../svg/signout.svg";
 import settings from "../svg/settings.svg";
 import home from "../svg/home.svg";
+import { LoginContext } from "../loginContext";
 
 const NavigatorRouter = () => {
+
+  const {user} = useContext(LoginContext)
   const navigate = useNavigate();
   const _logout = () => {
+    localStorage.removeItem("appy-token")
     navigate("/auth");
     Swal.fire({
       title: "Awwwnn! 🥺",
@@ -57,7 +61,7 @@ const NavigatorRouter = () => {
           </span>
         </Link>
         <Link
-          to="/account/settings"
+          to={`/account/settings/${user._id}`}
           style={{
             textDecoration: "none",
             textDecorationLine: "none",
