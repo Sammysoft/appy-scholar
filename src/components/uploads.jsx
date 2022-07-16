@@ -102,7 +102,7 @@ const Classes = () => {
                     <>
                       <Uploads
                         studentID={stud._id}
-                        studentname={stud.studentname.split(" ")[1]}
+                        studentname={stud.studentname}
                         subject={classData}
                       />
                     </>

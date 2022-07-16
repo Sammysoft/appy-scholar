@@ -51,7 +51,12 @@ const Uploads = ({ studentname, studentID, subject }) => {
     axios.post(`${api}/subjects/addscore`, payload).then((res) => {
       console.log(res.data.data);
       setScore(res.data.data);
-    });
+    }).catch(error=>{
+      Swal.fire({
+        title: "Oops 😟",
+        text: error.response.data.data
+      })
+    })
   };
 
   // useEffect(() => {
@@ -93,7 +98,7 @@ const Uploads = ({ studentname, studentID, subject }) => {
                   style={{ borderRadius: "10px" }}
                 /> */}
                 <span style={{ textTransform: "uppercase" }}>
-                  {studentname}
+                  {studentname.split(" ")[1]}
                 </span>
               </div>
               {loading === true ? (
@@ -224,7 +229,7 @@ const Uploads = ({ studentname, studentID, subject }) => {
                 width="20px"
                 style={{ borderRadius: "10px" }}
               /> */}
-              <span style={{ textTransform: "uppercase" }}>{studentname}</span>
+              <span style={{ textTransform: "uppercase" }}>{studentname.split(" ")[1]}</span>
             </div>
             <div style={{ textAlign: "right" }}>
               <span style={{ textAlign: "right" }}>
