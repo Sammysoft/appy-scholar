@@ -55,7 +55,7 @@ const FlashScreen = () => {
           <br />
           <br />
           <Link
-            to="/onboard"
+            to="/auth"
             style={{ textDecoration: "none", textDecorationLine: "none" }}
           >
             <Button>Get Started</Button>

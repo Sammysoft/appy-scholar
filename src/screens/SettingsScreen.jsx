@@ -198,7 +198,7 @@ const SettingsScreen = () => {
                 <>
                   <div>
                     <Loader active inline="centered" />
-                    <span style={{ opacity: 0.3, color:"white" }}>{uploadStatus}</span>
+                    <span style={{ opacity: 0.9, color:"white" }}>{uploadStatus}</span>
                   </div>
                 </>
               ) : (
