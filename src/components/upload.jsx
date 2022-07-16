@@ -222,7 +222,7 @@ const Uploads = ({ studentname, studentID, subject }) => {
                 width="20px"
                 style={{ borderRadius: "10px" }}
               /> */}
-              <span style={{textTransform: "uppercase"}}>{studentname}</span>
+              <p style={{textTransform: "uppercase"}}>{studentname}</p>
             </div>
             <div>
               <span>
