@@ -92,7 +92,9 @@ const Uploads = ({ studentname, studentID, subject }) => {
                   width="20px"
                   style={{ borderRadius: "10px" }}
                 /> */}
-                <span>{studentname}</span>
+                <span style={{ textTransform: "uppercase" }}>
+                  {studentname}
+                </span>
               </div>
               {loading === true ? (
                 <>
@@ -100,8 +102,8 @@ const Uploads = ({ studentname, studentID, subject }) => {
                 </>
               ) : (
                 <>
-                  <div>
-                    <form>
+                  <div style={{ textAlign: "right" }}>
+                    <form style={{ textAlign: "right" }}>
                       <input
                         style={{
                           width: "10vw",
@@ -222,13 +224,13 @@ const Uploads = ({ studentname, studentID, subject }) => {
                 width="20px"
                 style={{ borderRadius: "10px" }}
               /> */}
-              <p style={{textTransform: "uppercase"}}>{studentname}</p>
+              <span style={{ textTransform: "uppercase" }}>{studentname}</span>
             </div>
-            <div>
-              <span>
-                <small>1st</small>:{" "}{score.firsttest} <small>2nd</small>:
-                {" "}{score.secondtest} <small>Exam</small>:{" "}{score.exam}{" "}
-                <small>Total</small>:{" "}{score.tot}
+            <div style={{ textAlign: "right" }}>
+              <span style={{ textAlign: "right" }}>
+                <small>1st</small>: {score.firsttest} <small>2nd</small>:{" "}
+                {score.secondtest} <small>Exam</small>: {score.exam}{" "}
+                <small>Total</small>: {score.tot}
               </span>
             </div>
             <div>👍</div>
