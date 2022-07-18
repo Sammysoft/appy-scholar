@@ -146,7 +146,7 @@ const ClassMasterDashboard = () => {
             >
               <div>
                 <h3 style={{ fontFamily: "Irish Grover" }}>
-                  Welcome, {user.profilepicture}{" "}
+                  Welcome, {user.username}{" "}
                 </h3>
               </div>
 
