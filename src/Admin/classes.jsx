@@ -4,9 +4,12 @@ import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper";
+import Swal from "sweetalert2";
 import "swiper/css";
 import "swiper/css/pagination";
 import OneClass from "./class";
+import axios from "axios";
+import { api } from "../strings";
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -26,10 +29,27 @@ const Classes = () => {
   const navigate = useNavigate();
   const [classData, setClassData] = useState(null);
   const [toggleSelect, setToggleSelect] = useState(false);
+  const [students, setStudents] = useState([]);
+  const [score, setScores] = useState([]);
 
   useEffect(() => {
     setClassData(classData);
   }, [classData]);
+
+  const _getStudents = (data) => {
+    axios
+      .post(`${api}/students/class`, { data })
+      .then((res) => {
+        setStudents(res.data.data);
+        setScores(res.data.scores)
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Ahhh 🤨",
+          text: error.response.data.data,
+        });
+      });
+  };
 
   return (
     <>
@@ -89,15 +109,16 @@ const Classes = () => {
                   modules={[Pagination]}
                   className="mySwiper"
                 >
-                  <SwiperSlide>
-                    <OneClass />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                      <OneClass />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                      <OneClass/>
-                  </SwiperSlide>
+                  {students.map((stud) => {
+
+                    return (
+                      <>
+                        <SwiperSlide>
+                          <OneClass student={stud} studentsScores={score} />
+                        </SwiperSlide>
+                      </>
+                    );
+                  })}
                 </Swiper>
               </>
             )}
@@ -148,7 +169,8 @@ const Classes = () => {
               <span
                 onClick={() => {
                   setToggleSelect(!toggleSelect);
-                  setClassData("JssOne");
+                  _getStudents("Jss One");
+                  setClassData("Jss One");
                 }}
                 style={{
                   padding: "10px",
@@ -162,7 +184,8 @@ const Classes = () => {
               <span
                 onClick={() => {
                   setToggleSelect(!toggleSelect);
-                  setClassData("JssTwo");
+                  _getStudents("Jss Two");
+                  setClassData("Jss Two");
                 }}
                 style={{
                   padding: "10px",
@@ -176,7 +199,8 @@ const Classes = () => {
               <span
                 onClick={() => {
                   setToggleSelect(!toggleSelect);
-                  setClassData("JssThree");
+                  _getStudents("Jss Three");
+                  setClassData("Jss Three");
                 }}
                 style={{
                   padding: "10px",
@@ -190,7 +214,8 @@ const Classes = () => {
               <span
                 onClick={() => {
                   setToggleSelect(!toggleSelect);
-                  setClassData("SssOne");
+                  _getStudents("Sss One");
+                  setClassData("Sss One");
                 }}
                 style={{
                   padding: "10px",
@@ -204,7 +229,8 @@ const Classes = () => {
               <span
                 onClick={() => {
                   setToggleSelect(!toggleSelect);
-                  setClassData("SssTwo");
+                  _getStudents("Sss Two");
+                  setClassData("Sss Two");
                 }}
                 style={{
                   padding: "10px",
@@ -218,7 +244,8 @@ const Classes = () => {
               <span
                 onClick={() => {
                   setToggleSelect(!toggleSelect);
-                  setClassData("SssThree");
+                  _getStudents("Sss Three");
+                  setClassData("Sss Three");
                 }}
                 style={{
                   padding: "10px",

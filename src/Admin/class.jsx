@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from "react";
 import styled from "styled-components";
 import download from "../svg/download.svg";
@@ -17,7 +19,14 @@ const Button = styled.span`
   text-align: center;
 `;
 
-const OneClass = () => {
+const OneClass = ({ student, studentsScores }) => {
+  // const test = studentsScores.filter((scores) => {
+  //   return scores.studentname == "Mercy Abraham";
+  // });
+  // console.log(test);
+
+  let scored = [];
+
   return (
     <>
       <div>
@@ -31,17 +40,28 @@ const OneClass = () => {
           }}
         >
           <img
-            src="/images/profile.jpg"
+            src={student.profilePicture}
             height="50px"
             width="50px"
             alt="profile"
             style={{ borderRadius: "10px", padding: "5px" }}
           />
-          <span>Joshua Makindele</span>
+          <span>
+            {student.firstname} {student.lastname}
+          </span>
         </div>
         <div style={{ display: "block" }}>
           <span>Results</span>
           <table style={{ width: "100%" }}>
+            {scored.push(
+              studentsScores.filter((scores) => {
+                return (
+                  scores.studentname ==
+                  `${student.firstname} ${student.lastname}`
+                );
+              })
+            )
+            }{ console.log(scored)}
             <thead>
               <th>Subject</th>
               <th>1st CA</th>
@@ -52,7 +72,12 @@ const OneClass = () => {
             </thead>
             <tbody>
               <tr>
-                <td>Maths</td>
+                {
+
+                scored[0].map((val) => {
+                  // return <td>{val.text}</td>;
+                  console.log(val.text)
+                })}
                 <td>20</td>
                 <td>20</td>
                 <td>56</td>
@@ -179,8 +204,8 @@ const OneClass = () => {
           width: "100%",
           display: "grid",
           gridTemplateColumns: "auto auto",
-          columnGap:"40vw",
-         alignItems: "center"
+          columnGap: "40vw",
+          alignItems: "center",
         }}
       >
         <Button>Comment</Button>

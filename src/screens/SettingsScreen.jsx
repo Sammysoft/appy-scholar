@@ -51,7 +51,7 @@ const SettingsScreen = () => {
   const [uploadStatus, setUploadStatus] = useState(false);
   const [loading, setLoading] = useState(false);
   const id = window.location.pathname.slice(-24);
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
 
   useEffect(() => {
     setToggle("User");
@@ -119,7 +119,7 @@ const SettingsScreen = () => {
         text: "Make sure your password is the same",
       });
       setToggle("User");
-    } else if (pass1 === pass2 && pass1 !== null) {
+    } else if ((pass1 === pass2 && pass1 !== null) || username !== null) {
       const payload = {
         username,
         password,
@@ -198,7 +198,9 @@ const SettingsScreen = () => {
                 <>
                   <div>
                     <Loader active inline="centered" />
-                    <span style={{ opacity: 0.9, color:"white" }}>{uploadStatus}</span>
+                    <span style={{ opacity: 0.9, color: "white" }}>
+                      {uploadStatus}
+                    </span>
                   </div>
                 </>
               ) : (

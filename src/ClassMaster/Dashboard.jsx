@@ -119,7 +119,7 @@ const ClassMasterDashboard = () => {
                 style={{
                   width: "100px",
                   height: "100px",
-                  borderRadius: "50%",
+                  borderRadius: "8px",
                   border: "1px solid black",
                   position: "absolute",
                   bottom: "-5vh",
