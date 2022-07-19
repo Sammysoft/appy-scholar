@@ -12,6 +12,7 @@ import dossier from "../svg/dossier.svg";
 import list from "../svg/list.svg";
 import Student from "./students";
 import AddStudent from "./addstudent";
+import Subjects from "../components/subjects";
 import Comments from "./comments";
 import Upload from "../components/uploads";
 import NavigatorRouter from "../screens/Navigator";
