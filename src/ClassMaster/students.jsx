@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
 import ClassList from "./classlist";
 import MasterBottomNavClass from "./masterbottomnavclass";
+import { LoginContext } from "../loginContext";
+
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -18,6 +20,7 @@ const ScreenWrapper = styled.div`
 `;
 
 const Student = () => {
+  const { user } = useContext(LoginContext)
   const navigate = useNavigate();
   return (
     <>
@@ -47,7 +50,7 @@ const Student = () => {
           }}
         >
           <div>
-            <h3 style={{ fontFamily: "Irish Grover" }}>Your Students</h3>
+            <h3 style={{ fontFamily: "Irish Grover" }}>Your Students [{user.classRole}]</h3>
           </div>
           <div style={{ width: "90%", margin: "auto" }}>
             <div>

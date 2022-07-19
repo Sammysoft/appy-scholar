@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import pen from "../svg/pen.svg";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { api } from "../strings";
+import { LoginContext } from "../loginContext";
 
 const ClassList = () => {
+  const { user } = useContext(LoginContext);
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${api}/students/`)
+      .post(`${api}/students/class`, { data: user.classRole })
       .then((res) => {
         console.log(res.data.data);
         setStudents(res.data.data);
@@ -21,14 +23,13 @@ const ClassList = () => {
           text: "",
         });
       });
-  }, []);
+  }, [user.classRole]);
 
-  const _findAge = (dateofbirth) =>{
-    let date = new Date(dateofbirth).getFullYear()
-    let currentYear = new Date().getFullYear()
-    return Number(currentYear) - Number(date)
-
-  }
+  const _findAge = (dateofbirth) => {
+    let date = new Date(dateofbirth).getFullYear();
+    let currentYear = new Date().getFullYear();
+    return Number(currentYear) - Number(date);
+  };
 
   return (
     <>
@@ -86,18 +87,32 @@ const ClassList = () => {
                             alignItems: "center",
                           }}
                         >
-                          <span>
+                          <p style={{ textTransform: "uppercase" }}>
                             {stud.firstname} {stud.lastname}
-                          </span>{" "}
+                          </p>{" "}
                           <img src={pen} alt="pen" height="20px" />
                         </div>
                         <ul>
                           <li>{stud.studentClass}</li>
-                          <li>Green House</li>
-                          <li>Class Member</li>
+                          <li>+234{stud.phonenumber}</li>
+                          <li>{stud.post}</li>
                           <li>{_findAge(stud.dateofbirth)} years old</li>
                         </ul>
                       </p>
+                    </div>
+                    <div
+                      style={{
+                        position: "fixed",
+                        padding: "10px",
+                        backgroundColor: "#150845",
+                        color: "white",
+                        top: "1vh",
+                        zIndex: 1,
+                        right: "-5px",
+                        borderRadius:"5px",
+                      }}
+                    >
+                      <span style={{color: "#dbb921", fontSize: "1.5rem"}}>{students.length}</span> Students
                     </div>
                   </>
                 );
