@@ -10,6 +10,7 @@ import DashboardScreen from "./screens/DashboardScreen";
 import OfflineScreen from "./screens/OfflineScreen";
 import NotificationScreen from "./screens/NotificationScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import Results from "./components/results";
 import QuestionUpload from "./screens/QuestionUploadPage";
 import { LoginProvider } from "./loginContext";
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="/master/*" exact element={<DashboardScreen />} />
           <Route path="/staff/*" exact element={<DashboardScreen />} />
           <Route path="/account/settings/*" exact element={<SettingsScreen />} />
+          <Route path="/results/*" exact element={<Results/>} />
           <Route
             path="/account/notification"
             exact
