@@ -327,7 +327,7 @@ const StaffOnboardForm = () => {
                     placeholder="Class"
                     onChange={(e) => {
                       setClassRole(e.target.value);
-                      setRole(`Class Master [${e.target.value}]`);
+                      setRole(`Class Master`);
                       setShowClass(false);
                     }}
                   >
