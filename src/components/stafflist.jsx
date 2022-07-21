@@ -73,13 +73,13 @@ const StaffList = () => {
           {staffs.map((staff) => {
             return (
               <>
-                <div style={{ width: "80%", margin: "auto" }}>
+                <div style={{ width: "100%", margin: "auto" }}>
                   <div
                     style={{
-                      display: "flex",
-                      flexDirection: "row",
+                      display: "grid",
+                      gridTemplateColumns:"auto auto",
                       justifyContent: "space-around",
-                      alignItems: "center",
+                      alignItems: "flex-start",
                       width: "100%",
                       textAlign: "left",
                       borderRadius: "7px",
@@ -87,20 +87,24 @@ const StaffList = () => {
                       boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
                     }}
                   >
+                    <div style={{width: "100%"}}>
                     <img
                       style={{ borderRadius: "5px" }}
                       src={staff.profilepicture}
                       alt="profile"
-                      height="100px"
-                      width="100px"
+                      height="200px"
+                      width="150px"
                     />
+                    </div>
+                    <div style={{width:"100%"}}>
                     <p>
-                      <h3 style={{ fontFamily: "Irish Grover", textTransform: "uppercase" }}>
+                      <h3 style={{ fontFamily: "Irish Grover", textTransform: "uppercase", textAlign:"right" }}>
                         {staff.firstname} {staff.lastname}
                       </h3>
                       <ul>
                         <li>{staff.role}</li>
                         <li>{staff.email}</li>
+                        <li>{staff.phonenumber}</li>
                         <li>Subjects</li>
                         <ul>
                           {staff.subjects.map((sub) => {
@@ -113,9 +117,9 @@ const StaffList = () => {
                         </ul>
                       </ul>
                     </p>
+                    </div>
                   </div>
                 </div>
-                ;
               </>
             );
           })}

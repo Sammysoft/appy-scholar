@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "semantic-ui-react";
 import axios from "axios";
@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import "react-datepicker/dist/react-datepicker.css";
 import star from "../svg/star.svg";
 import { api } from "./../strings";
+import { LoginContext } from "../loginContext";
 import {
   Junior,
   Science,
@@ -42,6 +43,7 @@ const Button = styled.span`
 `;
 
 const OnboardForm = () => {
+  const { user } = useContext(LoginContext);
   const pick = useRef("");
 
   const navigate = useNavigate();
@@ -712,12 +714,31 @@ const OnboardForm = () => {
                     }}
                   >
                     <option value="Class">Class</option>
-                    <option value="Jss One">Jss One</option>
-                    <option value="Jss Two">Jss Two</option>
-                    <option value="Jss Three">Jss Three</option>
-                    <option value="Sss One">Sss One</option>
-                    <option value="Sss Two">Sss Two</option>
-                    <option value="Sss Three">Sss Three</option>
+                    {user.classRole === "Jss One" ? (
+                      <>
+                        <option value="Jss One">Jss One</option>
+                      </>
+                    ) : user.classRole === "Jss Two" ? (
+                      <>
+                        <option value="Jss Two">Jss Two</option>
+                      </>
+                    ) : user.classRole === "Jss Three" ? (
+                      <>
+                        <option value="Jss Three">Jss Three</option>
+                      </>
+                    ) : user.classRole === "Sss One" ? (
+                      <>
+                        <option value="Sss One">Sss One</option>
+                      </>
+                    ) : user.classRole === "Sss Two" ? (
+                      <>
+                        <option value="Sss Two">Sss Two</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="Sss Three">Sss Three</option>
+                      </>
+                    )}
                   </select>
                   {showSubject === true ? (
                     <>
