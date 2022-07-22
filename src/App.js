@@ -13,6 +13,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 import Results from "./components/results";
 import QuestionUpload from "./screens/QuestionUploadPage";
 import { LoginProvider } from "./loginContext";
+import UpdateStudent from "./components/updatestudents";
 
 function App() {
   const [status, setStatus] = useState(Boolean);
@@ -37,6 +38,7 @@ function App() {
           <Route path="/staff/*" exact element={<DashboardScreen />} />
           <Route path="/account/settings/*" exact element={<SettingsScreen />} />
           <Route path="/results/*" exact element={<Results/>} />
+          <Route path="/student/update/*" exact element={<UpdateStudent />} />
           <Route
             path="/account/notification"
             exact

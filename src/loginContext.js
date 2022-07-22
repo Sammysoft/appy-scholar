@@ -30,7 +30,16 @@ export const LoginProvider = ({children}) => {
             title: "Incomplete Profile Setup"
           })
         }
-      });
+      }).catch(error=>{
+        if(error.response.data === "Unauthorized"){
+          console.log(error.response.data)
+          localStorage.removeItem("appy-token")
+          Swal.fire({
+            title: "Oops 😥",
+            text: "Unauthorized, Please Login"
+          })
+        }
+      })
   }, [token]);
 
 

@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import pen from "../svg/pen.svg";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { api } from "../strings";
 import { LoginContext } from "../loginContext";
 
+
 const ClassList = () => {
   const { user } = useContext(LoginContext);
   const [students, setStudents] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     axios
@@ -30,6 +33,10 @@ const ClassList = () => {
     let currentYear = new Date().getFullYear();
     return Number(currentYear) - Number(date);
   };
+
+  const _initiateUpload = (id)=>{
+    navigate(`/student/update/${id}`)
+  }
 
   return (
     <>
@@ -90,7 +97,7 @@ const ClassList = () => {
                           <p style={{ textTransform: "uppercase" }}>
                             {stud.firstname} {stud.lastname}
                           </p>{" "}
-                          <img src={pen} alt="pen" height="20px" />
+                          <img onClick={()=>{_initiateUpload(stud._id)}} src={pen} alt="pen" height="20px" />
                         </div>
                         <ul>
                           <li>{stud.studentClass}</li>

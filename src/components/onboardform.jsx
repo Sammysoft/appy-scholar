@@ -684,6 +684,7 @@ const OnboardForm = () => {
                     Class
                   </label>
                   <select
+                  value={studentClass}
                     placeholder="Class"
                     onChange={(e) => {
                       setStudentClass(e.target.value);
@@ -734,10 +735,21 @@ const OnboardForm = () => {
                       <>
                         <option value="Sss Two">Sss Two</option>
                       </>
-                    ) : (
+                    ) : user.classRole === "Sss Three" ? (
                       <>
                         <option value="Sss Three">Sss Three</option>
                       </>
+                    ) : user.role === "Admin" ? (
+                      <>
+                        <option value="Jss One">Jss One</option>
+                        <option value="Jss Two">Jss Two</option>
+                        <option value="Jss Three">Jss Three</option>
+                        <option value="Sss One">Sss One</option>
+                        <option value="Sss Two">Sss Two</option>
+                        <option value="Sss Three">Sss Three</option>
+                      </>
+                    ) : (
+                      <></>
                     )}
                   </select>
                   {showSubject === true ? (
@@ -755,6 +767,7 @@ const OnboardForm = () => {
                         Specialization
                       </label>
                       <select
+                      value={category}
                         onClick={(e) => {
                           if (e.target.value === "Arts") {
                             setSubjectCategory(Arts);
