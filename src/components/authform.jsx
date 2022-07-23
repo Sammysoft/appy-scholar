@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { Loader } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
 import { Form } from "semantic-ui-react";
 import Swal from "sweetalert2";
@@ -22,24 +23,26 @@ const AuthForm = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {}, []);
 
   const _login = (e) => {
+    setLoading(true);
     e.preventDefault();
     const payload = {
       password,
       email,
     };
-
-    console.log(payload);
     axios
       .post(`${api}/auth`, payload)
       .then((res) => {
         localStorage.setItem("appy-token", res.data.token);
         navigate("/dashboard");
+        setLoading(false);
       })
       .catch((error) => {
+        setLoading(false);
         Swal.fire({
           title: "Oops 😥",
           text: error.response.data.data,
@@ -83,7 +86,15 @@ const AuthForm = () => {
             _login(e);
           }}
         >
-          Login
+          {loading === true ? (
+            <>
+              <span>
+                <Loader active inline="centered" />
+              </span>
+            </>
+          ) : (
+            <>Login</>
+          )}
         </Button>
       </Form>
     </>

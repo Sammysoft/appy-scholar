@@ -7,7 +7,6 @@ import download from "../svg/download.svg";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { api } from "../strings";
-import { saveAs } from 'file-saver'
 
 const Button = styled.span`
   border-radius: 7px;
@@ -24,72 +23,53 @@ const Button = styled.span`
   text-align: center;
 `;
 
-const OneClass = ({ student, studentsScores }) => {
-  const [comment, setComment] = useState("");
-  const [loading, setLoading] = useState(false);
-  let scored = [];
+const CommentList = ({student, studentsScores}) =>{
+    const [comment, setComment] = useState("");
+    const [loading, setLoading] = useState(false);
+    let scored = [];
 
-  {
-    scored.push(
-      studentsScores.filter((scores) => {
-        return scores.studentname == `${student.firstname} ${student.lastname}`;
-      })
-    );
-  }
-
-  // useEffect(() => {
-  //   // setComment(student.comment.principal)
-  // });
-
-  const _commentResult = (comment) => {
-    setLoading(true);
-    if (comment != "") {
-      const payload = {
-        principal: comment,
-      };
-      axios
-        .post(`${api}/student/comment/${student._id}`, payload)
-        .then((res) => {
-          setLoading(false);
+    {
+      scored.push(
+        studentsScores.filter((scores) => {
+          return scores.studentname == `${student.firstname} ${student.lastname}`;
         })
-        .catch((error) => {
-          setLoading(false);
-          Swal.fire({
-            title: "Oops 😥",
-            text: error.response.data.data,
-          });
-        });
-    } else {
-      setLoading(false);
-      Swal.fire({
-        title: "Can't be blank 😠",
-        text: "write something based on the student's performance in all registered subjects",
-      });
+      );
     }
-  };
+
+    useEffect(() => {
+      // setComment(student.comment.principal)
+    });
+
+    const _commentResult = (comment) => {
+      setLoading(true);
+      if (comment != "") {
+        const payload = {
+          principal: comment,
+        };
+        axios
+          .post(`${api}/student/comment/${student._id}`, payload)
+          .then((res) => {
+            setLoading(false);
+          })
+          .catch((error) => {
+            setLoading(false);
+            Swal.fire({
+              title: "Oops 😥",
+              text: error.response.data.data,
+            });
+          });
+      } else {
+        setLoading(false);
+        Swal.fire({
+          title: "Can't be blank 😠",
+          text: "write something based on the student's performance in all registered subjects",
+        });
+      }
+    };
 
 
-
-  //download Result
-
-
-  async function printResults() {
-    const { data } = await getPdf()
-    const blob = new Blob([data], { type: 'application/pdf' })
-    saveAs(blob, `${student.firstname}_${student.lastname}.pdf`)
-  }
-  async function getPdf() {
-    return axios.get(`${api}/results/${student._id}`, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      responseType: 'arraybuffer'
-    })
-  }
-
-  return (
-    <>
-      <>
+    return(
+        <>
         <div>
           <div
             style={{
@@ -112,7 +92,7 @@ const OneClass = ({ student, studentsScores }) => {
             </span>
           </div>
           <div style={{ display: "block" }}>
-            <span>Result Overview</span>
+            <span>Overview</span>
             <table style={{ width: "100%" }}>
               <thead>
                 <th>Subject</th>
@@ -207,17 +187,10 @@ const OneClass = ({ student, studentsScores }) => {
             Comment
           </Button>
 
-          <img
-            onClick={() => {
-                printResults()
-            }}
-            src={download}
-            alt="download"
-          />
+          <img src={download} alt="download" />
         </div>
       </>
-    </>
-  );
-};
+    )
+}
 
-export default OneClass;
+export default CommentList;

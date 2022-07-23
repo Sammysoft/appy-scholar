@@ -37,7 +37,7 @@ function App() {
           <Route path="/master/*" exact element={<DashboardScreen />} />
           <Route path="/staff/*" exact element={<DashboardScreen />} />
           <Route path="/account/settings/*" exact element={<SettingsScreen />} />
-          <Route path="/results/*" exact element={<Results/>} />
+          <Route path="/student/result/*" exact element={<Results/>} />
           <Route path="/student/update/*" exact element={<UpdateStudent />} />
           <Route
             path="/account/notification"
