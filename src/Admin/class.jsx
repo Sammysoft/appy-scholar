@@ -7,7 +7,7 @@ import download from "../svg/download.svg";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { api } from "../strings";
-import { saveAs } from 'file-saver'
+import { saveAs } from "file-saver";
 
 const Button = styled.span`
   border-radius: 7px;
@@ -27,6 +27,7 @@ const Button = styled.span`
 const OneClass = ({ student, studentsScores }) => {
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
   let scored = [];
 
   {
@@ -68,23 +69,22 @@ const OneClass = ({ student, studentsScores }) => {
     }
   };
 
-
-
   //download Result
 
-
   async function printResults() {
-    const { data } = await getPdf()
-    const blob = new Blob([data], { type: 'application/pdf' })
-    saveAs(blob, `${student.firstname}_${student.lastname}.pdf`)
+    setPdfLoading(true);
+    const { data } = await getPdf();
+    const blob = new Blob([data], { type: "application/pdf" });
+    saveAs(blob, `${student.firstname}_${student.lastname}.pdf`);
+    setPdfLoading(false);
   }
   async function getPdf() {
     return axios.get(`${api}/results/${student._id}`, {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        "Content-Type": "multipart/form-data",
       },
-      responseType: 'arraybuffer'
-    })
+      responseType: "arraybuffer",
+    });
   }
 
   return (
@@ -207,13 +207,23 @@ const OneClass = ({ student, studentsScores }) => {
             Comment
           </Button>
 
-          <img
-            onClick={() => {
-                printResults()
-            }}
-            src={download}
-            alt="download"
-          />
+          {pdfLoading === true ? (
+            <>
+              <Loader active inline="centered" />
+            </>
+          ) : (
+            <>
+              {" "}
+              <img
+                onClick={() => {
+                  setPdfLoading(true)
+                  printResults();
+                }}
+                src={download}
+                alt="download"
+              />
+            </>
+          )}
         </div>
       </>
     </>
