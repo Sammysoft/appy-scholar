@@ -32,18 +32,18 @@ export const Science = [
   "Mathematics",
   "English",
   "Marketing",
-  "Civic Education",
+  "Civic-Education",
   "Physics",
   "Chemistry",
   "Biology",
 ];
 
 export const ScienceElect = [
-  "Agric Science",
+  "Agric-Science",
   "Geography",
   "Economics",
-  "Computer Science",
-  "Oral English",
+  "Computer-Science",
+  "Oral-English",
 ];
 
 export const Arts = [
@@ -52,16 +52,16 @@ export const Arts = [
   "Economics",
   "Government",
   "Marketing",
-  "Civic Education",
+  "Civic-Education",
   "CRK",
   "Literature",
 ];
 
 export const ArtsElect = [
-  "Agric Science",
-  "Oral English",
+  "Agric-Science",
+  "Oral-English",
   "Biology",
-  "Computer Science",
+  "Computer-Science",
 ];
 
 export const Commerce = [
@@ -69,15 +69,15 @@ export const Commerce = [
   "English",
   "Commerce",
   "Economics",
-  "Civic Education",
+  "Civic-Education",
   "Marketing",
   "Accounting",
 ];
 
 export const CommerceElect = [
   "Government",
-  "Agric Science",
+  "Agric-Science",
   "Biology",
-  "Oral English",
-  "Computer Science",
+  "Oral-English",
+  "Computer-Science",
 ];
