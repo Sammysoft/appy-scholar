@@ -18,14 +18,14 @@ export const Junior = [
   "PHE",
   "Agric-Science",
   "CCA",
-  "Basic Technology",
+  "Basic-Technology",
   "Civic-Education",
   "Business-Studies",
   "Social-Studies",
-  "Computer Science",
+  "Computer-Science",
   "Oral-English",
   "Home-Economics",
-  "CRS"
+  "CRK"
 ];
 
 export const Science = [

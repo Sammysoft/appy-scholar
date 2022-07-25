@@ -79,7 +79,7 @@ const UpdateStudent = () => {
   const [pickFile, setPickFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
-  const [studentid, setStudentId] = useState("")
+  const [studentid, setStudentId] = useState("");
 
   let coreSubjects = [];
   coreSubjects.push(subjectCategory);
@@ -93,50 +93,58 @@ const UpdateStudent = () => {
       firstname,
       lastname,
       email,
-      gender,
       studentClass,
-      dateofbirth: startDate,
-      profilePicture,
+      picture,
       subjects: selectedSubjects,
       phonenumber,
+      studentid
     };
 
     console.log(payload);
-    axios
-      .post(`${api}/student/update/${id}`, payload)
-      .then((res) => {
-        let studentID = res.data.data._id;
-        axios
-          .post(`${api}/subjects/add`, {
-            firstname,
-            lastname,
-            subjects,
-            studentID,
-            studentClass,
-          })
-          .then((res) => {
-            navigate(-1);
-            setLoading(false);
-            Swal.fire({
-              title: "Fully Updated 👍",
-              text: res.data.data,
+    if (subjects.selectedSubjects.length !== 0) {
+      console.log(subjects);
+      axios
+        .post(`${api}/student/update/${id}`, payload)
+        .then((res) => {
+          let studentID = res.data.data._id;
+          axios
+            .post(`${api}/subjects/add`, {
+              firstname,
+              lastname,
+              subjects,
+              studentID,
+              studentClass,
+            })
+            .then((res) => {
+              navigate(-1);
+              setLoading(false);
+              Swal.fire({
+                title: "Fully Updated 👍",
+                text: res.data.data,
+              });
+            })
+            .catch((error) => {
+              setLoading(false);
+              Swal.fire({
+                title: "Oops 😥",
+                text: error.response.data.data,
+              });
             });
-          })
-          .catch((error) => {
-            setLoading(false);
-            Swal.fire({
-              title: "Oops 😥",
-              text: error.response.data.data,
-            });
+        })
+        .catch((error) => {
+          setLoading(false);
+          Swal.fire({
+            title: "Oops 😥",
+            text: error.response.data.data,
           });
-      })
-      .catch((error) => {
-        setLoading(false);
-        Swal.fire({
-          title: "Oops 😥",
-          text: error.response.data.data,
         });
+    } else {
+      setLoading(false);
+      Swal.fire({
+        title: "Wait ✋",
+        text: "Ensure a class is chosen, you may pick another class and then select the initial class again.",
       });
+    }
   };
 
   const uploadFile = () => {
@@ -198,6 +206,7 @@ const UpdateStudent = () => {
     axios.get(`${api}/student/get/${getId}`).then((res) => {
       console.log(res.data.data);
       setPicture(res.data.data.profilePicture);
+      setProfilePicture(res.data.profilePicture);
       setFirstName(res.data.data.firstname);
       setLastName(res.data.data.lastname);
       setGender(res.data.data.gender);
