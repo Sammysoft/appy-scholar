@@ -14,16 +14,18 @@ export const subjects = [
 export const Junior = [
   "Mathematics",
   "English",
-  "Basic Science",
+  "Basic-Science",
   "PHE",
-  "Agric Science",
+  "Agric-Science",
   "CCA",
   "Basic Technology",
-  "Civic Education",
-  "Business Studies",
-  "Social Studies",
+  "Civic-Education",
+  "Business-Studies",
+  "Social-Studies",
   "Computer Science",
-  "Oral English",
+  "Oral-English",
+  "Home-Economics",
+  "CRS"
 ];
 
 export const Science = [

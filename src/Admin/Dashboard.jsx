@@ -23,6 +23,7 @@ import NavigatorRouter from "../screens/Navigator";
 import UploadedQuestions from "./questions";
 import Charts from "./chart";
 import { LoginContext } from "../loginContext";
+import BroadSheet from "../components/broadsheet";
 
 const ScreenWrapper = styled.div`
   min-height: 110vh;
@@ -392,9 +393,9 @@ const AdminDashboard = () => {
                   </Link>
                   <Link
                     onClick={() => {
-                      setScreen("/admin/download/questions");
+                      setScreen("/admin/config/students");
                     }}
-                    to="/admin/download/questions"
+                    to="/admin/config/students"
                     style={{
                       textDecoration: "none",
                       textDecorationLine: "none",
@@ -490,6 +491,13 @@ const AdminDashboard = () => {
         </>
       );
       break;
+      case "/admin/config/students":
+        return (
+          <>
+            <BroadSheet />
+          </>
+        );
+        break;
     default:
       break;
   }
