@@ -91,6 +91,8 @@ const Uploads = ({ studentname, studentID, subject }) => {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  overflowX: "scroll",
+                  width:"40vw"
                 }}
               >
                 {/* <img
@@ -101,8 +103,7 @@ const Uploads = ({ studentname, studentID, subject }) => {
                   style={{ borderRadius: "10px" }}
                 /> */}
                 <span style={{ textTransform: "uppercase" }}>
-                  {studentname.substring(0, 1)}.{" "}
-                  {studentname.substring(studentname.indexOf(" ") + 1)}
+                  {studentname}
                 </span>
               </div>
               {loading === true ? (
@@ -234,8 +235,7 @@ const Uploads = ({ studentname, studentID, subject }) => {
                 style={{ borderRadius: "10px" }}
               /> */}
               <span style={{ textTransform: "uppercase" }}>
-                {studentname.substring(0, 1)}.{" "}
-                {studentname.substring(studentname.indexOf(" ") + 1)}
+                {studentname}
               </span>
             </div>
             <div style={{ textAlign: "right" }}>
