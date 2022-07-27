@@ -5,15 +5,16 @@ import Swal from "sweetalert2";
 
 const Results = () => {
   const studentID = window.location.pathname.slice(-24);
-  console.log(studentID)
 
 
   useEffect(() => {
     axios
       .get(`${api}/students/result/${studentID}`)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         setStudent(res.data.student);
+        setPrincipalsComments(res.data.student.comments.principal)
+        setClassMastersComments(res.data.student.comments.classmaster)
         setScore(res.data.scores);
       })
       .catch((error) => {
@@ -24,17 +25,16 @@ const Results = () => {
       });
   }, [studentID]);
 
-
-
   const [student, setStudent] = useState({});
   const [score, setScore] = useState([]);
-
-
+  const [principal, setPrincipalsComments] = useState()
+  const [classmasters, setClassMastersComments] = useState();
+  console.log(student);
 
   return (
     <>
       <div style={{ width: "100%" }}>
-        <header>
+        <header style={{textTransform:"uppercase"}}>
           <div
             style={{
               padding: "10px",
@@ -65,43 +65,46 @@ const Results = () => {
                 alt="profile"
                 width="100%"
                 height="100%"
+                style={{borderRadius: "10px"}}
               />
             </div>
             <div style={{ width: "70%", padding: "20px", fontSize: "1rem" }}>
-              <div style={{ padding: "0px 10px", textTransform:"uppercase" }}>
-                <span style={{ fontWeight: "700", textTransform:"uppercase" }}>Name:</span>{" "}
+              <div style={{ padding: "0px 10px", textTransform: "uppercase" }}>
+                <span style={{ fontWeight: "700", textTransform: "uppercase" }}>
+                  Name:
+                </span>{" "}
                 {student.firstname} {student.lastname}
               </div>
               <br />
-              <div style={{ padding: "0px 10px" }}>
-                <span style={{ fontWeight: "700" }}>Class:</span>{" "}
+              <div style={{ padding: "0px 10px", textTransform: "uppercase"  }}>
+                <span style={{ fontWeight: "700",textTransform: "uppercase"  }}>Class:</span>{" "}
                 {student.studentClass}
               </div>
-              {/* <br />
-              <div style={{ padding: "0px 10px" }}>
-                <span style={{ fontWeight: "700" }}>Term:</span> First Terminal
+              <br />
+              <div style={{ padding: "0px 10px", textTransform: "uppercase"  }}>
+                <span style={{ fontWeight: "700", textTransform: "uppercase"  }}>Term:</span> First Terminal
                 Examination
               </div>
               <br />
-              <div style={{ padding: "0px 10px" }}>
-                <span style={{ fontWeight: "700" }}>Year:</span> 2021/2022
-              </div> */}
-              <br />
-              <hr />
-              <div style={{ padding: "0px 10px" }}>
-                <span style={{ fontWeight: "700" }}>Total:</span> 1300 of 1400
+              <div style={{ padding: "0px 10px", textTransform: "uppercase"  }}>
+                <span style={{ fontWeight: "700", textTransform: "uppercase"  }}>Year:</span> 2021/2022
               </div>
               <br />
-              <div style={{ padding: "0px 10px" }}>
-                <span style={{ fontWeight: "700" }}>Average:</span> 95%
+              <hr />
+              <div style={{ padding: "0px 10px", textTransform: "uppercase"  }}>
+                <span style={{ fontWeight: "700" }}>Total:</span> {student.total} of 1400
+              </div>
+              <br />
+              <div style={{ padding: "0px 10px", textTransform: "uppercase"  }}>
+                <span style={{ fontWeight: "700" }}>Percentage:</span> {student.percentage}%
               </div>
               <br />
 
-              <div style={{ padding: "0px 10px" }}>
-                <span style={{ fontWeight: "700" }}>Position:</span> 1st of 73
+              <div style={{ padding: "0px 10px", textTransform: "uppercase"  }}>
+                <span style={{ fontWeight: "700" }}>Position:</span> {student.position}
               </div>
               <br />
-              <div style={{ padding: "0px 10px" }}>
+              <div style={{ padding: "0px 10px", textTransform: "uppercase"  }}>
                 <span style={{ fontWeight: "700" }}>Performance: </span>{" "}
                 Distinction
               </div>
@@ -109,7 +112,9 @@ const Results = () => {
           </div>
         </header>
         <section>
-          <table style={{ width: "100%", fontSize: "1.5rem", marginTop:"2vh" }}>
+          <table
+            style={{ width: "100%", fontSize: "1.5rem", marginTop: "2vh" }}
+          >
             <thead>
               <th style={{ textAlign: "left" }}>Subjects</th>
               <th style={{ textAlign: "left" }}>1st CA (20%)</th>
@@ -123,12 +128,40 @@ const Results = () => {
                 return (
                   <>
                     <tr>
-                      <td style={{padding: "10px 5px"}}>{mark.text}</td>
-                      <td style={{padding: "10px 5px"}}>{mark.studentscores.firsttest}</td>
-                      <td style={{padding: "10px 5px"}}>{mark.studentscores.secondtest}</td>
-                      <td style={{padding: "10px 5px"}}>{mark.studentscores.exam}</td>
-                      <td style={{padding: "10px 5px"}}>{mark.studentscores.tot}</td>
-                      <td style={{padding: "10px 5px"}}>A</td>
+                      <td style={{ padding: "10px 5px" }}>{mark.text}</td>
+                      <td style={{ padding: "10px 5px" }}>
+                        {mark.studentscores.firsttest}
+                      </td>
+                      <td style={{ padding: "10px 5px" }}>
+                        {mark.studentscores.secondtest}
+                      </td>
+                      <td style={{ padding: "10px 5px" }}>
+                        {mark.studentscores.exam}
+                      </td>
+                      <td style={{ padding: "10px 5px" }}>
+                        {mark.studentscores.tot}
+                      </td>
+                      {mark.studentscores.tot === 0 ? (
+                        <td>--</td>
+                      ) : mark.studentscores.tot < 35 ? (
+                        <td>F9</td>
+                      ) : mark.studentscores.tot < 40 ? (
+                        <td>E8</td>
+                      ) : mark.studentscores.tot < 45 ? (
+                        <td>D7</td>
+                      ) : mark.studentscores.tot < 50 ? (
+                        <td>C6</td>
+                      ) : mark.studentscores.tot < 55 ? (
+                        <td>C5</td>
+                      ) : mark.studentscores.tot < 60 ? (
+                        <td>C4</td>
+                      ) : mark.studentscores.tot < 65 ? (
+                        <td>B3</td>
+                      ) : mark.studentscores.tot < 70 ? (
+                        <td>B2</td>
+                      ) : (
+                        <td>A1</td>
+                      )}
                     </tr>
                   </>
                 );
@@ -136,13 +169,13 @@ const Results = () => {
             </tbody>
           </table>
         </section>
-        <footer style={{ fontSize: "1rem", padding: "10px" }}>
+        <footer style={{ fontSize: "1rem", padding: "10px", textTransform:"uppercase" }}>
           <div>
-            Class Master: <i>Keep it up and do not relent</i>
+            Class Master: <i>{classmasters}</i>
           </div>
           <br />
           <div>
-            Principal: <i>Don't jeopardize this giant stude</i>
+            Principal: <i>{principal}</i>
           </div>
         </footer>
       </div>

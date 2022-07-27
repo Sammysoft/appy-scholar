@@ -26,8 +26,25 @@ const Classes = () => {
   const { user } = useContext(LoginContext);
   const navigate = useNavigate();
   const [classData, setClassData] = useState(null);
-  const [students, setStudents] = useState([]);
+  const [student, setStudents] = useState([]);
   const [toggleSelect, setToggleSelect] = useState(false);
+
+
+  
+  const students = student.sort((a, b) => {
+    let fa = a.studentname.toLowerCase(),
+      fb = b.studentname.toLowerCase();
+
+    if (fa < fb) {
+      return -1;
+    }
+    if (fa > fb) {
+      return 1;
+    }
+    return 0;
+  });
+
+
 
   const _handleStudents = (value) => {
     axios
@@ -176,8 +193,6 @@ const Classes = () => {
                   </>
                 );
               })}
-
-
             </div>
           </>
         )}

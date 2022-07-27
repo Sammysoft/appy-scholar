@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
-import Student from "./student";
+import Students from "./student";
 import styled from "styled-components";
 import leftarrow from "../svg/left-arrow.svg";
 import pdf from "../svg/pdf.svg";
@@ -13,11 +13,11 @@ import student from "../svg/student.svg";
 import stats from "../svg/stats.svg";
 import sliders from "../svg/sliders.svg";
 import chip from "../svg/chip.svg";
-import StudentList from "../components/studentlist";
 import Classes from "./classes";
 import TermConfig from "./terminal-config";
 import Staff from "./staff";
 import StaffList from "../components/stafflist";
+import Student from "../components/students";
 import Subjects from "./subjects";
 import NavigatorRouter from "../screens/Navigator";
 import UploadedQuestions from "./questions";
@@ -200,12 +200,11 @@ const AdminDashboard = () => {
                 >
                   <Link
                     onClick={() => {
-                      setScreen("/admin/students");
+                      setScreen("/admin/student/list");
                     }}
-                    to="/admin/students"
+                    to="/admin/student/list"
                     style={{
                       textDecoration: "none",
-
                       textDecorationLine: "none",
                       color: "black",
                     }}
@@ -230,9 +229,9 @@ const AdminDashboard = () => {
                   </Link>
                   <Link
                     onClick={() => {
-                      setScreen("/admin/staff");
+                      setScreen("/admin/staff/list");
                     }}
-                    to="/admin/staff"
+                    to="/admin/staff/list"
                     style={{
                       textDecoration: "none",
                       textDecorationLine: "none",
@@ -428,17 +427,17 @@ const AdminDashboard = () => {
         </>
       );
       break;
-    case "/admin/students":
+    case "/admin/students/add":
       return (
         <>
-          <Student />
+          <Students />
         </>
       );
       break;
     case "/admin/student/list":
       return (
         <>
-          <StudentList />
+          <Student />
         </>
       );
       break;

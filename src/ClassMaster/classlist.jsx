@@ -9,8 +9,20 @@ import { LoginContext } from "../loginContext";
 
 const ClassList = () => {
   const { user } = useContext(LoginContext);
-  const [students, setStudents] = useState([]);
+  const [student, setStudents] = useState([]);
   const navigate = useNavigate()
+  const students = student.sort((a, b) => {
+    let fa = a.lastname.toLowerCase(),
+      fb = b.lastname.toLowerCase();
+
+    if (fa < fb) {
+      return -1;
+    }
+    if (fa > fb) {
+      return 1;
+    }
+    return 0;
+  });
 
   useEffect(() => {
     axios

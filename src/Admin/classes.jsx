@@ -41,7 +41,7 @@ const Classes = () => {
       .post(`${api}/students/class`, { data })
       .then((res) => {
         setStudents(res.data.data);
-        setScores(res.data.scores)
+        setScores(res.data.scores);
       })
       .catch((error) => {
         Swal.fire({
@@ -109,16 +109,18 @@ const Classes = () => {
                   modules={[Pagination]}
                   className="mySwiper"
                 >
-                  {students.map((stud) => {
 
-                    return (
-                      <>
-                        <SwiperSlide>
-                          <OneClass student={stud} studentsScores={score} />
-                        </SwiperSlide>
-                      </>
-                    );
-                  })}
+                  {students
+                    .sort((a, b) => b.percentage - a.percentage)
+                    .map((stud) => {
+                      return (
+                        <>
+                          <SwiperSlide>
+                            <OneClass student={stud} numberinclass = {students.length} positionindex = {students.indexOf(stud)} studentsScores={score} />
+                          </SwiperSlide>
+                        </>
+                      );
+                    })}
                 </Swiper>
               </>
             )}

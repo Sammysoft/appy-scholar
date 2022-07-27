@@ -24,7 +24,7 @@ const Button = styled.span`
   text-align: center;
 `;
 
-const OneClass = ({ student, studentsScores }) => {
+const OneClass = ({ student, studentsScores, positionindex, numberinclass }) => {
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
@@ -42,12 +42,38 @@ const OneClass = ({ student, studentsScores }) => {
   //   // setComment(student.comment.principal)
   // });
 
-  const _commentResult = (comment) => {
+  const _commentResult = (comment, positionindex) => {
     setLoading(true);
+    positionindex = Number(positionindex) + Number(1);
+    positionindex = positionindex.toString();
+      if(positionindex === "11"){
+      positionindex = positionindex + "th"
+     }else if(positionindex === "1"){
+      positionindex = positionindex  + "st"
+     }else if (
+      positionindex.slice(-1) === "1" &&
+      positionindex.substring(0, 1) !== "1"
+    ) {
+      positionindex = positionindex + "st";
+    } else if (
+      positionindex.slice(-1) === "2" &&
+      positionindex.substring(0, 1) !== "1"
+    ) {
+      positionindex = positionindex + "nd";
+    } else if (
+      positionindex.slice(-1) === "3" &&
+      positionindex.substring(0, 1) !== "1"
+    ) {
+      positionindex = positionindex + "rd";
+    } else {
+      positionindex = positionindex + "th";
+    }
     if (comment != "") {
       const payload = {
         principal: comment,
+        position: `${positionindex} Of ${numberinclass}`,
       };
+      console.log(payload);
       axios
         .post(`${api}/student/comment/${student._id}`, payload)
         .then((res) => {
@@ -157,6 +183,15 @@ const OneClass = ({ student, studentsScores }) => {
                     </>
                   );
                 })}
+                <tr>
+                  <td>Total: </td>
+                  <td colSpan={5}>
+                    {scored[0].reduce((prev, cur) => {
+                      return prev + cur.studentscores.tot;
+                    }, 0)}{" "}
+                    of {scored[0].length}00
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -201,7 +236,7 @@ const OneClass = ({ student, studentsScores }) => {
         >
           <Button
             onClick={() => {
-              _commentResult(comment);
+              _commentResult(comment, positionindex);
             }}
           >
             Comment
@@ -216,7 +251,7 @@ const OneClass = ({ student, studentsScores }) => {
               {" "}
               <img
                 onClick={() => {
-                  setPdfLoading(true)
+                  setPdfLoading(true);
                   printResults();
                 }}
                 src={download}

@@ -32,12 +32,11 @@ export const LoginProvider = ({children}) => {
         }
       }).catch(error=>{
         if(error.response.data === "Unauthorized"){
-          console.log(error.response.data)
           localStorage.removeItem("appy-token")
           navigate("/auth")
           Swal.fire({
             title: "Session Timeout ⌛",
-            text: "Unauthorized access, Please Login"
+            text: "Please Login Again"
           })
         }
       })

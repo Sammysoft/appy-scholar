@@ -34,7 +34,9 @@ const StaffList = () => {
           text: error.response.data.data,
         });
       });
-  });
+  },[]);
+
+  
   const navigate = useNavigate();
   return (
     <>
@@ -68,7 +70,7 @@ const StaffList = () => {
           }}
         >
           <div>
-            <h3 style={{ fontFamily: "Irish Grover" }}>List of Staff</h3>
+            <h3 style={{ fontFamily: "Irish Grover" }}>List of OGS Staff</h3>
           </div>
           {staffs.map((staff) => {
             return (
@@ -104,7 +106,7 @@ const StaffList = () => {
                       <ul>
                         <li>{staff.role}</li>
                         <li>{staff.email}</li>
-                        <li>{staff.phonenumber}</li>
+                        <li>{staff.username}</li>
                         <li>Subjects</li>
                         <ul>
                           {staff.subjects.map((sub) => {

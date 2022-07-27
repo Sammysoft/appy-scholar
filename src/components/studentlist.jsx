@@ -1,302 +1,145 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import AdminBottomNavReg from "../Admin/bottomnavreg";
-import leftarrow from "../svg/left-arrow.svg";
+import pen from "../svg/pen.svg";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { api } from "../strings";
+import { LoginContext } from "../loginContext";
 
-const ScreenWrapper = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: white;
-  padding: 0px;
-  margin: 0px;
-  box-sizing: border-box;
-`;
 
 const StudentList = () => {
-  const navigate = useNavigate();
+  const { user } = useContext(LoginContext);
+  const [student, setStudents] = useState([]);
+  const navigate = useNavigate()
+  const students = student.sort((a, b) => {
+    let fa = a.lastname.toLowerCase(),
+      fb = b.lastname.toLowerCase();
+
+    if (fa < fb) {
+      return -1;
+    }
+    if (fa > fb) {
+      return 1;
+    }
+    return 0;
+  });
+
+  useEffect(() => {
+    axios
+      .get(`${api}/students/`)
+      .then((res) => {
+        console.log(res.data.data);
+        setStudents(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        Swal.fire({
+          title: "Oops 😥",
+          text: "",
+        });
+      });
+  }, [user.classRole]);
+
+  const _findAge = (dateofbirth) => {
+    let date = new Date(dateofbirth).getFullYear();
+    let currentYear = new Date().getFullYear();
+    return Number(currentYear) - Number(date);
+  };
+
+  const _initiateUpload = (id)=>{
+    navigate(`/student/update/${id}`)
+  }
+
   return (
     <>
-      <ScreenWrapper>
-        <div
-          style={{
-            width: "100%",
-            height: "5vh",
-            textAlign: "left",
-            position: "relative",
-            marginTop: "0px",
-          }}
-        >
-          <span onClick={() => navigate(-1)}>
-            <img
-              style={{ borderRadius: "5px" }}
-              src={leftarrow}
-              alt="pointer"
-            />
-          </span>
+      <div style={{ marginBottom: "10vh" }}>
+        <div style={{ width: "100%", margin: "auto" }}>
+          {students.length === 0 ? (
+            <>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  textAlign: "center",
+                  padding: "5px",
+                  height: "90vh",
+                }}
+              >
+                No Students Yet!
+              </div>
+            </>
+          ) : (
+            <>
+              {students.map((stud) => {
+                return (
+                  <>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-around",
+                        alignItems: "center",
+                        width: "100%",
+                        textAlign: "left",
+                        borderRadius: "7px",
+                        padding: "5px",
+                        boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
+                      }}
+                    >
+                      <img
+                        style={{ borderRadius: "5px" }}
+                        src={stud.profilePicture}
+                        alt="profile"
+                        height="100px"
+                        width="100px"
+                      />
+                      <p>
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <p style={{ textTransform: "uppercase" }}>
+                            {stud.firstname} {stud.lastname}
+                          </p>{" "}
+                          <img onClick={()=>{_initiateUpload(stud._id)}} src={pen} alt="pen" height="20px" />
+                        </div>
+                        <ul>
+                          <li>{stud.studentClass}</li>
+                          <li>+234{stud.phonenumber}</li>
+                          <li>{stud.post}</li>
+                          <li>{_findAge(stud.dateofbirth)} years old</li>
+                        </ul>
+                      </p>
+                    </div>
+                    <div
+                      style={{
+                        position: "fixed",
+                        padding: "10px",
+                        backgroundColor: "#150845",
+                        color: "white",
+                        top: "1vh",
+                        zIndex: 1,
+                        right: "-5px",
+                        borderRadius:"5px",
+                      }}
+                    >
+                      <span style={{color: "#dbb921", fontSize: "1.5rem"}}>{students.length}</span> Students
+                    </div>
+                  </>
+                );
+              })}
+            </>
+          )}
         </div>
-
-        <div
-          style={{
-            width: "100%",
-            height: "fit-content",
-            textAlign: "center",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-          }}
-        >
-          <div>
-            <h3 style={{ fontFamily: "Irish Grover" }}>List of Students</h3>
-          </div>
-          <div style={{ width: "80%", margin: "auto" }}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "100%",
-                textAlign: "left",
-                borderRadius: "7px",
-                padding: "5px",
-                boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-              }}
-            >
-              <img
-                style={{ borderRadius: "5px" }}
-                src="/images/profile.jpg"
-                alt="profile"
-                height="100px"
-                width="100px"
-              />
-              <p>
-                <h6>Samuel Dare-Owonibi</h6>
-                <ul>
-                  <li>JssOne</li>
-                  <li>Green House</li>
-                  <li>Class Member</li>
-                  <li>12 years Old</li>
-                </ul>
-              </p>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "100%",
-                textAlign: "left",
-                borderRadius: "7px",
-                padding: "5px",
-                boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-              }}
-            >
-              <img
-                style={{ borderRadius: "5px" }}
-                src="/images/profile.jpg"
-                alt="profile"
-                height="100px"
-                width="100px"
-              />
-              <p>
-                <h6>Samuel Dare-Owonibi</h6>
-                <ul>
-                  <li>JssOne</li>
-                  <li>Green House</li>
-                  <li>Class Member</li>
-                  <li>12 years Old</li>
-                </ul>
-              </p>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "100%",
-                textAlign: "left",
-                borderRadius: "7px",
-                padding: "5px",
-                boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-              }}
-            >
-              <img
-                style={{ borderRadius: "5px" }}
-                src="/images/profile.jpg"
-                alt="profile"
-                height="100px"
-                width="100px"
-              />
-              <p>
-                <h6>Samuel Dare-Owonibi</h6>
-                <ul>
-                  <li>JssOne</li>
-                  <li>Green House</li>
-                  <li>Class Member</li>
-                  <li>12 years Old</li>
-                </ul>
-              </p>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "100%",
-                textAlign: "left",
-                borderRadius: "7px",
-                padding: "5px",
-                boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-              }}
-            >
-              <img
-                style={{ borderRadius: "5px" }}
-                src="/images/profile.jpg"
-                alt="profile"
-                height="100px"
-                width="100px"
-              />
-              <p>
-                <h6>Samuel Dare-Owonibi</h6>
-                <ul>
-                  <li>JssOne</li>
-                  <li>Green House</li>
-                  <li>Class Member</li>
-                  <li>12 years Old</li>
-                </ul>
-              </p>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "100%",
-                textAlign: "left",
-                borderRadius: "7px",
-                padding: "5px",
-                boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-              }}
-            >
-              <img
-                style={{ borderRadius: "5px" }}
-                src="/images/profile.jpg"
-                alt="profile"
-                height="100px"
-                width="100px"
-              />
-              <p>
-                <h6>Samuel Dare-Owonibi</h6>
-                <ul>
-                  <li>JssOne</li>
-                  <li>Green House</li>
-                  <li>Class Member</li>
-                  <li>12 years Old</li>
-                </ul>
-              </p>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "100%",
-                textAlign: "left",
-                borderRadius: "7px",
-                padding: "5px",
-                boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-              }}
-            >
-              <img
-                style={{ borderRadius: "5px" }}
-                src="/images/profile.jpg"
-                alt="profile"
-                height="100px"
-                width="100px"
-              />
-              <p>
-                <h6>Samuel Dare-Owonibi</h6>
-                <ul>
-                  <li>JssOne</li>
-                  <li>Green House</li>
-                  <li>Class Member</li>
-                  <li>12 years Old</li>
-                </ul>
-              </p>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "100%",
-                textAlign: "left",
-                borderRadius: "7px",
-                padding: "5px",
-                boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-              }}
-            >
-              <img
-                style={{ borderRadius: "5px" }}
-                src="/images/profile.jpg"
-                alt="profile"
-                height="100px"
-                width="100px"
-              />
-              <p>
-                <h6>Samuel Dare-Owonibi</h6>
-                <ul>
-                  <li>JssOne</li>
-                  <li>Green House</li>
-                  <li>Class Member</li>
-                  <li>12 years Old</li>
-                </ul>
-              </p>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "100%",
-                textAlign: "left",
-                borderRadius: "7px",
-                padding: "5px",
-                boxShadow: "-7px 7px 14px rgba(248, 141, 43, 0.07)",
-              }}
-            >
-              <img
-                style={{ borderRadius: "5px" }}
-                src="/images/profile.jpg"
-                alt="profile"
-                height="100px"
-                width="100px"
-              />
-              <p>
-                <h6>Samuel Dare-Owonibi</h6>
-                <ul>
-                  <li>JssOne</li>
-                  <li>Green House</li>
-                  <li>Class Member</li>
-                  <li>12 years Old</li>
-                </ul>
-              </p>
-            </div>
-          </div>
-          <AdminBottomNavReg route="/admin/students"/>
-        </div>
-      </ScreenWrapper>
+      </div>
     </>
   );
 };
