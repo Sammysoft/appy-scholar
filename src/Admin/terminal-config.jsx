@@ -6,7 +6,9 @@ import leftarrow from "../svg/left-arrow.svg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import NavigatorRouter from "../screens/Navigator";
-
+import axios from "axios";
+import { api } from "../strings";
+import Swal from "sweetalert2";
 
 const ScreenWrapper = styled.div`
   height: 100vh;
@@ -40,24 +42,31 @@ const termOptions = [
 ];
 
 const TermConfig = () => {
-  const [seniorfee, setSeniorFee] = useState("");
-  const [juniorfee, setJuniorFee] = useState("");
-  const [term, setTerm] = useState("");
+  const [seniorfees, setSeniorFee] = useState("");
+  const [juniorfees, setJuniorFee] = useState("");
+  const [currterm, setTerm] = useState("");
+  const [year, setYear]= useState('')
   const [startDate, setStartDate] = useState(new Date());
   const navigate = useNavigate();
 
-  const _configTerm = (e) =>{
-    e.preventDefault()
+  const _configTerm = (e) => {
+    e.preventDefault();
     const payload = {
-      seniorfee,
-      juniorfee,
-      termbegins: startDate,
-      term
-    }
+      seniorfees,
+      juniorfees,
+      nexttermbegins: startDate,
+      currterm,
+      year
+    };
 
     console.log(payload);
-    navigate(-1)
-  }
+    axios.post(`${api}/term/config`, payload).then((res) => {
+      Swal.fire({
+        title: "Done Succesfully 👍",
+        text: "You have completely setup the records for the term.",
+      });
+    });
+  };
   return (
     <>
       <ScreenWrapper>
@@ -102,7 +111,7 @@ const TermConfig = () => {
               height: "80vh",
             }}
           >
-            <div style={{width: "80%"}}>
+            <div style={{ width: "80%" }}>
               <Form
                 style={{
                   textAlign: "left",
@@ -111,6 +120,7 @@ const TermConfig = () => {
               >
                 <Form.Group widths={2}>
                   <Form.Field
+                    value={currterm}
                     style={{ fontFamily: "Irish Grover" }}
                     control={Select}
                     label="Term"
@@ -123,9 +133,19 @@ const TermConfig = () => {
                     label="School Fees (Junior)"
                     type="number"
                     placeholder="N8,500"
-                    value={juniorfee}
+                    value={juniorfees}
                     onChange={(e) => {
                       setJuniorFee(e.target.value);
+                    }}
+                  />
+                  <Form.Input
+                    style={{ fontFamily: "Irish Grover" }}
+                    label="Academic Year"
+                    type="text"
+                    placeholder="2021/2022"
+                    value={year}
+                    onChange={(e) => {
+                      setYear(e.target.value);
                     }}
                   />
                   <Form.Input
@@ -133,7 +153,7 @@ const TermConfig = () => {
                     label="School Fees (Senior)"
                     placeholder="N9,000"
                     type="number"
-                    value={seniorfee}
+                    value={seniorfees}
                     onChange={(e) => {
                       setSeniorFee(e.target.value);
                     }}
