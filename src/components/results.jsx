@@ -102,7 +102,7 @@ const Results = () => {
               <hr />
               <div style={{ padding: "0px 10px", textTransform: "uppercase" }}>
                 <span style={{ fontWeight: "700" }}>Total:</span>{" "}
-                {student.total} of 1400
+                {student.total}
               </div>
               <br />
               <div style={{ padding: "0px 10px", textTransform: "uppercase" }}>

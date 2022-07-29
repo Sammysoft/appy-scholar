@@ -55,7 +55,7 @@ const CommentList = ({ student, studentsScores }) => {
       const payload = {
         classmaster: comment,
         percentage,
-        total,
+        total : total + scored[0].length00,
       };
       axios
         .post(`${api}/student/comment/${student._id}`, payload)
